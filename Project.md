@@ -2,7 +2,7 @@
 
 **Table of Contents** 
 
-1. [Planning]()
+1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
 
 
 ## Criteria A: Planning 

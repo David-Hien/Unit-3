@@ -27,3 +27,12 @@ My proposed solution is to create an application that runs with Python and the K
 
 **Why SQLAlchemy and ORM?**
 
+
+### Success Criteria
+
+1. User is able to Create, Add, Edit, Delete data in the table
+2. The application has a login page
+3. The login information and database is secured
+4. Able to transfer a row from one table to another
+5. Upload image*
+6. Function to sort the table based on different factors

@@ -1,23 +1,29 @@
 # Unit 3 Project 
 
-**Table of Contents** 
+## Table of Contents
 
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
 
 
 ## Criteria A: Planning 
 
-### Client
+### Definition of Problem
 
-Nagisa Sato
+My client's name is Nagisa Sato. She has a collection of shoes - both the ones currently in her possesion and the ones she would like to have. At the moment, my client does not use any application or system to organize her collection. For that reason, Nagisa wishes for an application that can store the data of her shoes and is able to organize it base on different factors as to help her keep a better track of the collection. In addition, my client wants to have a "wishlist" - list of shoes that she wants to add to her collection in the future - that is also organized to find the next pair to buy.
 
-### Why is it being developed?
+### Proposed Solution
 
-My client has a collection of shoes - both the ones currently in her possesion and the ones she wants. At the moment, she does not use any application or system to organize her collection. For that reason, Nagisa wishes for an application that can store the data of her shoes and is able to organize it base on different factors as to help her keep a better track of the collection. In addition, my client wants to have a "wishlist" - list of shoes that she wants to add to her collection in the future - that is also organized to find the next pair to buy.
+My proposed solution is to create an application that uses Python, Kivymd Library, and SQLAlchemy.
 
-### Proposed Solution 
+**Python**
 
-My proposed solution is to create an application that runs with Python and the Kivymd Library.
+Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because not only does it manage the app contents better, it also organises the program so that it 
+
+**Kivymd Library**
+
+
+**SQLAlchemy**
+
 
 ### Justification 
 
@@ -36,3 +42,4 @@ My proposed solution is to create an application that runs with Python and the K
 4. Able to transfer a row from one table to another
 5. Upload image*
 6. Function to sort the table based on different factors
+7. Uses OOP (Object-oriented programming)

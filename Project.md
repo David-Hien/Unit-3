@@ -13,25 +13,16 @@ My client's name is Nagisa Sato. She has a collection of shoes - both the ones c
 
 ### Proposed Solution
 
-My proposed solution is to create an application that uses Python, Kivymd Library, and SQLAlchemy.
+My proposed solution is to create an application that uses Python, Kivymd Library, and SQLAlchemy. Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it easier to understand the program functions and fix bugs.
 
-**Python**
-
-Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because not only does it manage the app contents better, it also organises the program so that it 
-
-**Kivymd Library**
+***Python***
 
 
-**SQLAlchemy**
+***Kivymd Library**
 
 
-### Justification 
+***SQLAlchemy and ORM**
 
-**Why Python and Kivy?**
-
-
-
-**Why SQLAlchemy and ORM?**
 
 
 ### Success Criteria

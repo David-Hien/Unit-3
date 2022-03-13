@@ -18,10 +18,10 @@ My proposed solution is to create an application that uses Python, Kivymd Librar
 ***Python***
 
 
-***Kivymd Library**
+***Kivymd Library***
 
 
-***SQLAlchemy and ORM**
+***SQLAlchemy and ORM***
 
 
 

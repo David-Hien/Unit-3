@@ -13,10 +13,13 @@ My client's name is Nagisa Sato. She has a collection of shoes - both the ones c
 
 ### Proposed Solution
 
-My proposed solution is to create an application that uses Python, Kivymd Library, and SQLAlchemy. Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it easier to understand the program functions and fix bugs.
+My proposed solution is to create an application that uses Python as the main programming language, Kivymd Library for the GUI (Graphical User Interface), and SQLAlchemy to manipulate the database. The app will consist of a Login/Register screen, a page to show the shoe collections, and another page for the user to manually edit the collections. Two other additions are:
+- a search function that can assist the user navigate large databases
+- a sort function that rearrange the collection based on factors (eg. name, price, color) of the user's choice
 
 ***Python***
 
+Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it easier to understand the program functions and fix bugs.
 
 ***Kivymd Library***
 

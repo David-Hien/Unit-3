@@ -19,7 +19,7 @@ My proposed solution is to create an application that uses Python as the main pr
 
 ***Python***
 
-Python is a highly versitile programming language that supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it easier to understand the program functions and fix bugs.
+I chose Python as the programming language for the following reasons. Firstly, Python is widely used in various areas thanks to it simple syntax and focus on natural language, making it beginner friendly at the same time not losing much versitility. According to Stackoverflow blog by David Robinson<sup>[[1]](https://stackoverflow.blog/2017/09/06/incredible-growth-python/)</sup>, Python is the fastest growing programming language, and is predicted to be the most in-demand language in 2020, which was proven to be true - according to PYPL PopularitY of Programming Language<sup>[[2]](https://pypl.github.io/PYPL.html)</sup>, Python ranked first with the most tutorial video views on Google. Also, because I'm familiar with this language, the process of developing this product will be more efficient. Secondly, Python supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it easier to understand the program attributes and methods. The main advantage of this programming module is that 
 
 ***Kivymd Library***
 
@@ -37,3 +37,14 @@ Python is a highly versitile programming language that supports OOP (Object-orie
 5. Upload image*
 6. Function to sort the table based on different factors
 7. Uses OOP (Object-oriented programming)
+
+
+
+
+
+
+
+### Citation
+1. Robinson, D. (2017, September 6). The incredible growth of python. Stack Overflow Blog. Retrieved March 22, 2022, from https://stackoverflow.blog/2017/09/06/incredible-growth-python/ 
+2. Carbonnelle, P. (n.d.). PYPL popularity of Programming Language index. index. Retrieved March 22, 2022, from https://pypl.github.io/PYPL.html 
+3. 

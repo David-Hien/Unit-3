@@ -23,6 +23,7 @@ I chose Python as the programming language for the following reasons. Firstly, P
 
 ***Kivymd Library***
 
+The Kivymd Library is an open-source library used as a framework for cross-platform applications. 
 
 ***SQLAlchemy and ORM***
 

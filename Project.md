@@ -31,12 +31,13 @@ I chose Python as the programming language for the following reasons. Firstly, P
 ### Success Criteria
 
 1. User is able to Create, Add, Edit, Delete data in the table
-2. The application has a login page
-3. The login information and database is secured
-4. Able to transfer a row from one table to another
+2. The application has a login and register page
+3. The login information and database is secured and the password is hashed
+4. Able to transfer a row (an object) from one table to another
 5. Upload image*
 6. Function to sort the table based on different factors
-7. Uses OOP (Object-oriented programming)
+7. Function to search specific information from a defined range
+8. Uses OOP (Object-oriented programming)
 
 
 

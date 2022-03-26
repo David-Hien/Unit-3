@@ -23,7 +23,7 @@ I chose Python as the programming language for the following reasons. Firstly, P
 
 ***Kivymd Library***
 
-The Kivymd Library is an open-source library used as a framework for cross-platform applications. 
+The Kivymd Library is an open-source library used as a framework for cross-platform applications<sup>[[3]](https://kivymd.readthedocs.io/en/latest/)</sup>. It is a tool for creating GUI (Graphical User Interface) for applications, which serves as a communicator between the input (keyboard, mouse, multitouch events, etc.) and the program, as well as between the program and the output (screen). 
 
 ***SQLAlchemy and ORM***
 
@@ -49,4 +49,5 @@ The Kivymd Library is an open-source library used as a framework for cross-platf
 ### Citation
 1. Robinson, D. (2017, September 6). The incredible growth of python. Stack Overflow Blog. Retrieved March 22, 2022, from https://stackoverflow.blog/2017/09/06/incredible-growth-python/ 
 2. Carbonnelle, P. (n.d.). PYPL popularity of Programming Language index. index. Retrieved March 22, 2022, from https://pypl.github.io/PYPL.html 
-3. 
+3. Rodríguez, A. (2021). Welcome to KIVYMD's documentation!. Welcome to KivyMD's documentation! - KivyMD 1.0.0.dev0 documentation. Retrieved March 26, 2022, from https://kivymd.readthedocs.io/en/latest/ 
+4. 

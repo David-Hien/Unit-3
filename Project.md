@@ -47,8 +47,24 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ## Criteria B: Solution Overview
 
-### ER diagram
+### ER Diagram
 
+![ER_diagram_extended](https://user-images.githubusercontent.com/89367058/160287988-e97c1aa3-76f9-4242-b20e-fccd8b476c5d.png)
+
+
+### ER Table (example)
+
+**Table: User**
+| name   | username | email                           | password | age | gender |
+|--------|----------|---------------------------------|----------|-----|--------|
+| Nagisa | nagi     | 2023.nagisa.sato@uwcisak.jp     | naginagi | 17  | female |
+| David  | david    | 2023.hien.minh.trinh@uwcisak.jp | david032 | 17  | male   |
+
+**Table: Shoes**
+| brand  | model       | size | material               | color       | price |
+|--------|-------------|------|------------------------|-------------|-------|
+| Adidas | Ultra-boost | 44.5 | thermoplastic urethane | black/white | 300   |
+| Nike   | Jordan 1    | 39   | leather                | white       | 5000  |
 
 
 ### Test Plan

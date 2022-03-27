@@ -47,6 +47,11 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ## Criteria B: Solution Overview
 
+### UML Diegram
+
+![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/160288435-7bd03946-a999-45be-9e39-b9bf69db4394.png)
+
+
 ### ER Diagram
 
 ![ER_diagram_extended](https://user-images.githubusercontent.com/89367058/160287988-e97c1aa3-76f9-4242-b20e-fccd8b476c5d.png)

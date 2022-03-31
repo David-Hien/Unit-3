@@ -48,8 +48,11 @@ class RandomGrouping:
 
         # This loop prints the group number and its members
         for group_num in range(len(grouping_list)):
+            # Varible repersents the list of group member in the current group
+            current_group = grouping_list[group_num]
+            
             # Prints the group number and the names inside the list seperated by a comma
-            print(f"Group {group_num + 1}:", ', '.join(grouping_list[group_num]))
+            print(f"Group {group_num + 1} {(len(current_group))}:", ', '.join(current_group))
 
 
 # List of students in G11

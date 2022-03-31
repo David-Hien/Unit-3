@@ -52,7 +52,7 @@ class RandomGrouping:
             current_group = grouping_list[group_num]
             
             # Prints the group number and the names inside the list seperated by a comma
-            print(f"Group {group_num + 1} {(len(current_group))}:", ', '.join(current_group))
+            print(f"Group {group_num + 1} ({len(current_group)}):", ', '.join(current_group))
 
 
 # List of students in G11
@@ -78,14 +78,15 @@ G4_random_group.grouping()
 ## Run
 ```
 /Users/hientrinh/exampleApp/venv/bin/python /Users/hientrinh/exampleApp/random_group_generator.py
-Group 1: Michael, Ming, Boss, Anju, Kamilla
-Group 2: Aup, Nina, Ji Yang, Hana, Danish
-Group 3: Janet, David, Ryu, Yurika, Vanni
-Group 4: Nagisa, Marian, Minori, Reiji, Yuki
-Group 5: Minato, Beatrice, Mitsuki Baba, Kojiro, Zoopash
-Group 6: Elia, Shinebayar, Leo, Taichi, Shimba
-Group 7: Soraya, Marika, Fabi, Kyoka, Asahi
-Group 8: Andy, Julia, Mitsuki Kyota, Jun
+Group 1 (5): Michael, Ming, Boss, Anju, Kamilla
+Group 2 (5): Aup, Nina, Ji Yang, Hana, Danish
+Group 3 (5): Janet, David, Ryu, Yurika, Vanni
+Group 4 (5): Nagisa, Marian, Minori, Reiji, Yuki
+Group 5 (5): Minato, Beatrice, Mitsuki Baba, Kojiro, Zoopash
+Group 6 (5): Elia, Shinebayar, Leo, Taichi, Shimba
+Group 7 (5): Soraya, Marika, Fabi, Kyoka, Asahi
+Group 8 (4): Andy, Julia, Mitsuki Kyota, Jun
 
 Process finished with exit code 0
+
 ```

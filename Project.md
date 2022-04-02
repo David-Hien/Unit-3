@@ -49,21 +49,21 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ### UML Diegram
 
-![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/160288435-7bd03946-a999-45be-9e39-b9bf69db4394.png)
+![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/161373661-df4e5e95-5beb-4503-a19b-4fa82f9b2499.png)
 
 
 ### ER Diagram
 
-![ER_diagram_extended](https://user-images.githubusercontent.com/89367058/160287988-e97c1aa3-76f9-4242-b20e-fccd8b476c5d.png)
+![Extended_ER_diagram](https://user-images.githubusercontent.com/89367058/161374040-9c06bf97-d484-4f60-9fd7-bb012408d727.png)
 
 
 ### ER Table (example)
 
 **Table: User**
-| name   | username | email                           | password | age | gender |
-|--------|----------|---------------------------------|----------|-----|--------|
-| Nagisa | nagi     | 2023.nagisa.sato@uwcisak.jp     | naginagi | 17  | female |
-| David  | david    | 2023.hien.minh.trinh@uwcisak.jp | david032 | 17  | male   |
+| username | email                           | password |
+|----------|---------------------------------|----------|
+| nagi     | 2023.nagisa.sato@uwcisak.jp     | naginagi |
+| david    | 2023.hien.minh.trinh@uwcisak.jp | david032 |
 
 **Table: Shoes**
 | brand  | model       | size | material               | color       | price |

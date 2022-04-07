@@ -1,7 +1,7 @@
 # 0.1 + 0.2 == 0.3 is False
 
 ## Explanation
-When using float values to represent numbers, it's stored in base 2. In the case of decimal numbers, most of the times, the decimal fractions cannot be represented as binary fractions<sup>[[1]](https://github.com/David-Hien/Unit-3/edit/main/hw_float_number.md#citation)</sup>. For that reason, the statement 0.1 + 0.2 == 0.3 is false.
+When using float values to represent numbers, it's stored in base 2. In the case of decimal numbers, most of the times, the decimal fractions cannot be represented as binary fractions<sup>[[1]](https://github.com/David-Hien/Unit-3/blob/main/hw_float_number.md#citation)</sup>. For that reason, the statement 0.1 + 0.2 == 0.3 is false.
 
 ## Code
 ``` python
@@ -17,7 +17,7 @@ False
 ```
 
 ## Possible solution
-To tackle the issue, I decided to use getcontext().prec from the inbuilt decimal module to change the significant figures of the decimal value so as to prevent it from taking the incorrect digits into account<sup>[[1]](https://github.com/David-Hien/Unit-3/edit/main/hw_float_number.md#citation)</sup>. In the example below, I set the number of significant figures to 6, instead of the default value of 28.
+To tackle the issue, I decided to use getcontext().prec from the inbuilt decimal module to change the significant figures of the decimal value so as to prevent it from taking the incorrect digits into account<sup>[[1]](https://github.com/David-Hien/Unit-3/blob/main/hw_float_number.md#citation)</sup>. In the example below, I set the number of significant figures to 6, instead of the default value of 28.
 
 ## Code
 ``` python

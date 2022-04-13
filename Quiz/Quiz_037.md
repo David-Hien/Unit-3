@@ -8,13 +8,17 @@ class Quiz_037(MDApp):
     def build(self):
         return
 
+    # This method takes the input in USD then converts it into YEN
     def convert(self):
+        # This command tries to run the code, however, in the case the calculation cannot happen due to error
+        # displays "Error" message
         try:
             self.root.ids.output.text = str(int(self.root.ids.input.text) * 115)
         except ValueError:
             self.root.ids.output.text = "Error"
 
 
+# Run the app
 converter = Quiz_037()
 converter.run()
 

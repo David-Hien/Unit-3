@@ -41,3 +41,4 @@ Quiz_039.insert_db()
 ```
 
 ## Run
+<img width="731" alt="Quiz_039" src="https://user-images.githubusercontent.com/89367058/163078056-e756a59b-445b-4833-88fe-0dfe2b60029a.png">

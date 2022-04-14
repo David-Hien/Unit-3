@@ -34,11 +34,9 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 1. User is able to Create, Add, Edit, Delete data in the table
 2. The application has a login and register page
 3. The login information and database is secured and the password is hashed
-4. Able to transfer a row (an object) from one table to another
-5. Upload image*
-6. Function to sort the table based on different factors
-7. Function to search specific information from a defined range
-8. Uses OOP (Object-oriented programming)
+4. Function to sort the table based on different factors
+5. Function to search specific information from a defined range
+6. Uses OOP (Object-oriented programming)
 
 ### Evidence
 

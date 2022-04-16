@@ -3,8 +3,8 @@
 ## Table of Contents
 
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
-2. [Design]
-3. [Developement]
+2. [Design](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-b-solution-overview)
+3. [Development]
 5. [Evaluation]
 6. [Citation](https://github.com/David-Hien/Unit-3/blob/main/Project.md#citation)
 
@@ -44,7 +44,7 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 
 ### Evidence
 
-https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-97ad-bdec87c4fe62.mov
+https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-97ad-bdec87c4fe62.mov  
 
 
 ## Criteria B: Solution Overview
@@ -83,6 +83,8 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 ### Test Plan
 
 
+
+## Criteria C: Development
 
 ## Citation
 1. Robinson, D. (2017, September 6). The incredible growth of python. Stack Overflow Blog. Retrieved March 22, 2022, from https://stackoverflow.blog/2017/09/06/incredible-growth-python/ 

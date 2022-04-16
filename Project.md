@@ -4,7 +4,7 @@
 
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
 2. [Design](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-b-solution-overview)
-3. [Development]
+3. [Development](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-c-development)
 5. [Evaluation]
 6. [Citation](https://github.com/David-Hien/Unit-3/blob/main/Project.md#citation)
 

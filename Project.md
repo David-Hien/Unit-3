@@ -3,6 +3,10 @@
 ## Table of Contents
 
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
+2. [Design]
+3. [Developement]
+5. [Evaluation]
+6. [Citation](https://github.com/David-Hien/Unit-3/blob/main/Project.md#citation)
 
 
 ## Criteria A: Planning 
@@ -45,7 +49,13 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ## Criteria B: Solution Overview
 
-### UML Diegram
+### Solution Sketch
+
+### Flow Diagrams
+
+### System Diagram
+
+### UML Diagram
 
 ![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/161373661-df4e5e95-5beb-4503-a19b-4fa82f9b2499.png)
 
@@ -71,7 +81,6 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 
 ### Test Plan
-
 
 
 

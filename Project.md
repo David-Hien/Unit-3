@@ -63,9 +63,13 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 - From the HomeScreen, the user can access the TableScreen via "Table", or chose go back to the LoginScreen via "Logout".
 - From the TableScreen, return to the HomeScreen via "Back"
 
-### Flow Diagrams
-
 ### System Diagram
+
+![system_diagram](https://user-images.githubusercontent.com/89367058/163824670-2851f64a-4b74-4ea5-b221-2a2f30bce573.png)
+
+***Figure 2:*** System Diagram
+
+### Flow Diagrams
 
 ### UML Diagram
 

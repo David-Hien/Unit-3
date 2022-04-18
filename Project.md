@@ -51,7 +51,17 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 ## Criteria B: Solution Overview
 
 ### Solution Sketch
-![IMG_1231](https://user-images.githubusercontent.com/89367058/163763781-fb77e8cb-50a2-46f6-a3c8-ab33a2c0fb6f.JPG)
+
+![IMG_1232](https://user-images.githubusercontent.com/89367058/163813430-44550b42-912f-4e20-bf2b-59c13366dded.JPG)
+
+***Figure 1:*** Sketch of purposed solution's wireframe
+
+***Fig.1*** is a wireframe showing a total of 4 screens - LoginScreen, RegisterScreen, HomeScreen, and TableSscreen - connected via buttons.
+- The LoginScreen and RegisterScreen are connected via the "Register"/"Login" buttons.
+- From the RegisterScreen, registering will automatically send the user to the LoginScreen.
+- From the LoginScreen, logging in will automatically send the user to the HomeScreen.
+- From the HomeScreen, the user can access the TableScreen via "Table", or chose go back to the LoginScreen via "Logout".
+- From the TableScreen, return to the HomeScreen via "Back"
 
 ### Flow Diagrams
 

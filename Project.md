@@ -51,6 +51,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 ## Criteria B: Solution Overview
 
 ### Solution Sketch
+![IMG_1231](https://user-images.githubusercontent.com/89367058/163763781-fb77e8cb-50a2-46f6-a3c8-ab33a2c0fb6f.JPG)
 
 ### Flow Diagrams
 
@@ -88,6 +89,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 ## Criteria C: Development
 
 ### Software Update
+The software will recieve update as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the sofetware update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exeption of the database), and install the new version of the system.
 
 
 ## Apendix (as of 11:40AM, Apr 18)
@@ -142,11 +144,6 @@ class Shoes(Base):
         self.color = color
         self.price = price
         self.user_id = user_id
-
-
-# Creates the database
-db_engine = create_engine("sqlite:///orm_database.db")
-Base.metadata.create_all(db_engine)
 
 ```
 
@@ -228,7 +225,10 @@ class RegisterScreen(MDScreen):
         pass_hashed = encrypt_password(pass_entered)
 
         # Update the database with the new account
-        new_user = users(username_entered, email_entered, pass_hashed)
+        new_user = users(username=username_entered,
+                         email=email_entered,
+                         password=pass_hashed)
+
         session.add(new_user)
 
         # Tries to update the database, fail if account already exist (same email)
@@ -283,15 +283,10 @@ class AddRemoveScreen(MDScreen):
 
 class TableScreen(MDScreen):
     """ This class creates the table screen"""
+    # Call table
     data_tables = None
 
-    # Go back to welcome/main screen
-    def back_to_home(self):
-        self.parent.current = "HomeScreen"
-
-    # This method queries the Shoes table and return its data as a list
-    def get_shoes(self):
-        # Store the current logged in user's email
+    def current_user(self):
         current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
 
         # Query the user
@@ -299,8 +294,16 @@ class TableScreen(MDScreen):
                         filter(users.email == current_user_email).
                         first())
 
+        return current_user
+
+    # Go back to welcome/main screen
+    def back_to_home(self):
+        self.parent.current = "HomeScreen"
+
+    # This method queries the Shoes table and return its data as a list
+    def get_shoes(self):
         # Query the Shoes table for rows with matching Foreign key to the user
-        query = session.query(Shoes).filter(Shoes.user_id == current_user.id)
+        query = session.query(Shoes).filter(Shoes.user_id == self.current_user().id)
         session.close()
 
         # Append the results into a list then return it
@@ -374,7 +377,7 @@ class TableScreen(MDScreen):
     # and prints it on the according TextEdit fields
     def check_pressed(self, table, row):
         # Assign variables to store the values of the selected row
-        shoe_id, brand, size, model, material, color, price = row
+        shoe_id, brand, model, size, material, color, price = row
 
         # Print the values on the TextEdit fields
         self.ids.shoe_id.text = shoe_id
@@ -385,40 +388,107 @@ class TableScreen(MDScreen):
         self.ids.color.text = color
         self.ids.price.text = price
 
-    # This method runs when the button "Save" is pressed
-    # Takes the values in the TextEdit fields and update it in the database
-    def edit_save(self):
+    # This method takes the input from the values in the TextEdit fields
+    # and converted it into a row
+    def get_row(self):
         # Assign variables to store the values of each TextEdit fields
-        updated_brand = self.ids.brand.text
-        updated_model = self.ids.model.text
-        updated_size = self.ids.size.text
-        updated_material = self.ids.material.text
-        updated_color = self.ids.color.text
-        updated_price = self.ids.price.text
+        brand = self.ids.brand.text
+        model = self.ids.model.text
+        size = self.ids.size.text
+        material = self.ids.material.text
+        color = self.ids.color.text
+        price = self.ids.price.text
 
-        if (not updated_brand or
-                not updated_model or
-                not updated_size or
-                not updated_material or
-                not updated_color or
-                not updated_price):
+        if (
+                not brand or
+                not model or
+                not size or
+                not material or
+                not color or
+                not price):
             print("Input missing")
             return
 
         # Format the values correctly for update
-        updated_row = {Shoes.brand: updated_brand,
-                       Shoes.model: updated_model,
-                       Shoes.size: updated_size,
-                       Shoes.material: updated_material,
-                       Shoes.color: updated_color,
-                       Shoes.price: updated_price}
+        row = (brand, model, size, material, color, price)
+        return row
+
+    # This method runs when the button "Save" is pressed
+    def edit_save(self):
+        # Checks if Shoe id is sspecified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        # Row data
+        updated_row = self.get_row()
+        if not updated_row:
+            return
+
+        brand, model, size, material, color, price = updated_row
 
         # Update the Shoes table with the new data
         session.query(Shoes). \
-            filter(Shoes.id == self.ids.shoe_id.text). \
-            update(updated_row)
+            filter(Shoes.id == shoe_id). \
+            update({Shoes.brand: brand,
+                    Shoes.model: model,
+                    Shoes.size: size,
+                    Shoes.material: material,
+                    Shoes.color: color,
+                    Shoes.price: price})
 
         session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    def add_item(self):
+        # Checks if Shoe id is sspecified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if shoe_id:
+            print("Shoe id missing")
+            return
+
+        # Row data
+        new_row = self.get_row()
+        if not new_row:
+            return
+
+        brand, model, size, material, color, price = new_row
+
+        # Update the Shoes table with the new data
+        new_shoe = Shoes(brand=brand,
+                         model=model,
+                         size=size,
+                         material=material,
+                         color=color,
+                         price=price,
+                         user_id=self.current_user().id)
+
+        session.add(new_shoe)
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    def remove_item(self):
+        # Checks if Shoe id is sspecified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            delete()
+
+        session.commit()
+        session.close()
 
         # Refresh the table and TextEdit fields
         self.update_table()
@@ -710,72 +780,98 @@ ScreenManager:
             root.back_to_home()
 
     MDBoxLayout:
-        orientation: "horizontal"
+        orientation: "vertical"
         pos_hint: {"center_x": .5, "top": .3}
         size_hint: .9, .3
 
-        MDLabel:
-            text: "Edit entry"
-            font_size: 30
-            pos_hint : {"left": 0, "center_y": .5}
-            size_hint: .08, .3
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"top": 1}
+            size_hint: 1, .6
 
-        MDLabel:
-            id: shoe_id
-            pos_hint : {"left": .1, "center_y": .5}
-            size_hint : .03, .3
+            MDLabel:
+                text: "Edit"
+                font_size: 30
+                pos_hint: {"left": .05, "bottom": .2}
+                size_hint: .05, .5
 
-        MDTextField:
-            id: brand
-            hint_text : "brand"
-            pos_hint : {"left": .15, "center_y": .5}
-            size_hint : .1, .3
+            MDTextField:
+                id: shoe_id
+                hint_text: "id"
+                pos_hint: {"left": .1, "bottom": .2}
+                size_hint: .03, .5
 
-        MDTextField:
-            id: model
-            hint_text : "model"
-            pos_hint : {"left": .26, "center_y": .5}
-            size_hint : .1, .3
+            MDTextField:
+                id: brand
+                hint_text: "brand"
+                pos_hint: {"left": .2, "bottom": .2}
+                size_hint: .1, .5
 
-        MDTextField:
-            id: size
-            hint_text : "size"
-            pos_hint : {"left": .37, "center_y": .5}
-            size_hint : .05, .3
+            MDTextField:
+                id: model
+                hint_text: "model"
+                pos_hint: {"left": .35, "bottom": 0}
+                size_hint: .1, .5
 
-        MDTextField:
-            id: material
-            hint_text : "material"
-            pos_hint : {"left": .44, "center_y": .5}
-            size_hint : .1, .3
+            MDTextField:
+                id: size
+                hint_text: "size"
+                pos_hint: {"left": .5, "bottom": 0}
+                size_hint: .05, .5
 
-        MDTextField:
-            id: color
-            hint_text : "color"
-            pos_hint : {"left": .56, "center_y": .5}
-            size_hint : .1, .3
+            MDTextField:
+                id: material
+                hint_text: "material"
+                pos_hint: {"left": .6, "bottom": 0}
+                size_hint: .1, .5
 
-        MDTextField:
-            id: price
-            hint_text : "price"
-            pos_hint : {"left": .67, "center_y": .5}
-            size_hint : .05, .3
+            MDTextField:
+                id: color
+                hint_text: "color"
+                pos_hint: {"left": .75, "bottom": 0}
+                size_hint: .1, .5
 
-        MDRaisedButton:
-            text: "Save"
-            size_hint: .1, .2
-            pos_hint : {"left": .74, "center_y": .5}
-            on_release:
-                root.edit_save()
+            MDTextField:
+                id: price
+                hint_text: "price"
+                pos_hint: {"left": .9, "bottom": 0}
+                size_hint: .05, .5
 
-        MDRaisedButton:
-            text: "Clear"
-            md_bg_color : 1, .1, .1, 1
-            size_hint: .1, .2
-            pos_hint : {"left": .9, "center_y": .5}
-            on_release:
-                root.clear()
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"bottom": 0}
+            size_hint: 1, .4
 
+            MDRaisedButton:
+                text: "Save"
+                size_hint: .1, .5
+                pos_hint : {"center_x": .2, "center_y": .7}
+                on_release:
+                    root.edit_save()
+
+            MDRaisedButton:
+                text: "Add"
+                md_bg_color: 0, .8, 0, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .4, "center_y": .7}
+                on_release:
+                    root.add_item()
+
+            MDRaisedButton:
+                text: "Clear"
+                md_bg_color: .4, .4, .4, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .6, "center_y": .7}
+                on_release:
+                    root.clear()
+
+            MDRaisedButton:
+                text: "Remove"
+                md_bg_color: 1, .1, .1, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .8, "center_y": .7}
+                on_release:
+                    root.remove_item()
 ```
 
 ## Citation

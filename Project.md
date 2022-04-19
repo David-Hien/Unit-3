@@ -97,6 +97,27 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 
 ### Development Plan
+| task no. | task                                        | planned outcome                                                                      | est. time | est. completion date | criteria |
+|----------|---------------------------------------------|--------------------------------------------------------------------------------------|-----------|----------------------|----------|
+| 1        | Planning: meet with client                  | identified problem, success criteria, meeting schedule, etc.                         | 20min     | March 2              | A        |
+| 2        | Planning: purposed solution                 | solid idea of a purposed solution, sent to client for confirmation                   | 30min     | March 2              | A        |
+| 3        | Planning: rationale                         | researched and documented the rationale for the purposed solution                    | 30min     | March 7              | A        |
+| 4        | Design: solution sketch                     | detailed wireframe of the application                                                | 20min     | March 15             | B        |
+| 5        | Design: system diagram                      | detailed system diagram of the application                                           | 30min     | March 15             | B        |
+| 6        | Design: UML diagram                         | detailed UML diagram                                                                 | 15min     | March 18             | B        |
+| 7        | Design: ER table & diagram                  | detailed ER table & diagram                                                          | 20min     | March 18             | B        |
+| 8        | Development: login screen                   | functional GUI for the login screen                                                  | 40min     | March 25             | C        |
+| 9        | Development: database & password hashing    | created 2 database (users, Shoes) using ORM-SQLAlchemy; function for password hasing | 60min     | March 25             | C        |
+| 10       | Development: register screen                | functional GUI for the register screen                                               | 30min     | March 27             | C        |
+| 11       | Development: welcome screen                 | functional GUI for the welcome screen                                                | 20min     | April 2              | C        |
+| 12       | Development: table screen                   | functional GUI for the table screen                                                  | 90min     | April 5              | C        |
+| 13       | Development: edit function for table screen | feature for editing existing data (Shoes) and saving it to the database              | 30min     | April 7              | C        |
+| 14       | Development: add/remove function            | feature for adding/removing data (Shoes) in the database                             | 50min     | April 7              | C        |
+| 15       | Development: sorting function               | feature for sorting the table based on each columns                                  | 40min     | April 11             | C        |
+| 16       | Design: flow diagrams                       | detailed flow diagrams of specific functions                                         | 30min     | April 15             | B        |
+| 17       | Development: program check                  | no bugs/errors, appropriate written comments, good coding practices                  | 30min     | April 17             | C        |
+| 18       | Functionality: testing                      | test application following the testing plan                                          | 30min     | April 19             | D        |
+| 19       | Functionality: video demonstration          | film video for final submission                                                      | 30min     | April 20             | D        |
 
 ### Test Plan
 

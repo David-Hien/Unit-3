@@ -131,7 +131,158 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ## Criteria C: Development
 
+### Tools
+1. Object-oriented programming (OOP)
+2. KivyMD library
+3. Relation database
+4. SQLAlchemy, ORM (Object-relational mapping)
+
 ### Login Screen
+
+***Instal and import KivyMD***
+
+Before I can start programming, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to imported from KivyMD as follow.
+
+``` python
+# Import kivymd for GUI design
+from kivymd.app import MDApp
+from kivymd.material_resources import dp
+from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.screen import MDScreen
+```
+
+***Creating the UI with KivyMD***
+
+The first step to creating a Login screen is designing and making the interface. I'll be using KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a SreenManager, which is used to manage multiple screens, then include all the screens/pages in the application as follow.
+
+``` .kv
+ScreenManager:
+    id: scr_manager
+
+    LoginScreen:
+        name: "LoginScreen"
+        id: LoginScreen
+
+    RegisterScreen:
+        name: "RegisterScreen"
+        id: RegisterScreen
+
+    HomeScreen:
+        name: "HomeScreen"
+        id: HomeScreen
+
+    TableScreen:
+        name: "TableScreen"
+        id: TableScreen
+```
+
+Then, proceed to create the Login screen. Firstly, I set the background as an image using FitImage inside an MDBoxLayout that covers the whole window.
+
+``` .kv
+# Define the login screen
+<LoginScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+
+        FitImage:
+            source: 'shoez_login_background.jpg'
+            opacity: .85
+```
+
+Secondly, add an MDCard and an MDBoxLayout inside of it. This will hold all the elements (other than the background) of the Login screen.
+
+``` .kv
+# Define the login screen
+<LoginScreen>:
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: None, None
+        size: "400dp", "500dp"
+        elevation: 10
+        # For colors: red, green, blue, alpha
+        md_bg_color: 229/255, 170/255, 140/255, 0.6
+        radius: 20, 20, 20, 20
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: .8, .8
+            pos_hint: {"center_x": .5, "center_y": .5}
+            spacing: dp(15)
+            padding: [dp(20), dp(60)]
+```
+
+Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and two MDTextFields for the email and password input.
+
+``` .kv
+# Define the login screen
+<LoginScreen>:
+    MDCard:
+        ...
+
+        MDBoxLayout:
+            ...
+
+            MDLabel:
+                id: name_label
+                text: "Shoez"
+                halign: "center"
+                font_style: "H1"
+                color: 1, 1, 1, 1
+
+            MDTextField:
+                id: email_input
+                hint_text: "email"
+                color: 1, 1, 1, 1
+                required: True
+                icon_right: "email"
+
+            MDTextField:
+                id: password_input
+                hint_text: "password"
+                color: 1, 1, 1, 1
+                password: True
+                required: True
+                icon_right: "eye-off"
+```
+
+Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will run a method - I'm going to discuss later, [here]() - to check whether the login information is valid and log the user in. The ***Register*** button will move the user to the Register screen.
+
+``` .kv
+# Define the login screen
+<LoginScreen>:
+    MDCard:
+        ...
+
+        MDBoxLayout:
+            ...
+            
+            MDRaisedButton:
+                id: login_button
+                text: "Login"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                on_release:
+                    root.try_login()
+                    password_input.text=''
+
+            MDRaisedButton:
+                id: register_button
+                text: "Register"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                md_bg_color: 0, 0, 0, .3
+                on_release:
+                    root.parent.current='RegisterScreen'
+                    email_input.text=''
+                    password_input.text=''
+```
+
+After building the UI, I'll now move to creating the python code for the Login screen.
+
+
 
 
 ### Software Update

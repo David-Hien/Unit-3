@@ -5,8 +5,8 @@
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
 2. [Design](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-b-solution-overview)
 3. [Development](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-c-development)
-5. [Evaluation]
-6. [Apendix](https://github.com/David-Hien/Unit-3/blob/main/Project.md#apendix-as-of-1140am-apr-18)
+5. [Functionality]
+6. [Apendix](https://github.com/David-Hien/Unit-3/blob/main/Project.md#apendix-as-of-314pm-apr-18)
 7. [Citation](https://github.com/David-Hien/Unit-3/blob/main/Project.md#citation)
 
 
@@ -104,6 +104,9 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ### Software Update
 The software will recieve update as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the sofetware update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exeption of the database), and install the new version of the system.
+
+
+## Criteria D: Functionality
 
 
 ## Apendix (as of 3:14PM, Apr 18)

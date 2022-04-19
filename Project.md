@@ -67,7 +67,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ![system_diagram](https://user-images.githubusercontent.com/89367058/163824670-2851f64a-4b74-4ea5-b221-2a2f30bce573.png)
 
-***Figure 2:*** System Diagram
+***Figure 2:*** System Diagram. Shows the input, output, and the process in between.
 
 ### Flow Diagrams
 
@@ -75,11 +75,13 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/161373661-df4e5e95-5beb-4503-a19b-4fa82f9b2499.png)
 
+***Figure 6:*** UML diagram for the database. Shows the attributes of each class/tables and the relation of the two: ***one*** user can have ***n*** Shoes.
 
 ### ER Diagram
 
 ![Extended_ER_diagram](https://user-images.githubusercontent.com/89367058/161374040-9c06bf97-d484-4f60-9fd7-bb012408d727.png)
 
+***Figure 7:*** ER diagram for the database. Visualized version of the database.
 
 ### ER Table (example)
 
@@ -89,11 +91,15 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 | nagi     | 2023.nagisa.sato@uwcisak.jp     | naginagi |
 | david    | 2023.hien.minh.trinh@uwcisak.jp | david032 |
 
+***Figure 8:*** ER table 1. User table with some examples.
+
 **Table: Shoes**
 | brand  | model       | size | material               | color       | price |
 |--------|-------------|------|------------------------|-------------|-------|
 | Adidas | Ultra-boost | 44.5 | thermoplastic urethane | black/white | 300   |
 | Nike   | Jordan 1    | 39   | leather                | white       | 5000  |
+
+***Figure 9:*** ER table 2. Shoes table with some examples.
 
 
 ### Development Plan
@@ -124,6 +130,9 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 
 ## Criteria C: Development
+
+### Login Screen
+
 
 ### Software Update
 The software will recieve update as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the sofetware update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exeption of the database), and install the new version of the system.

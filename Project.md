@@ -5,7 +5,7 @@
 1. [Planning](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-a-planning)
 2. [Design](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-b-solution-overview)
 3. [Development](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-c-development)
-5. [Functionality]
+5. [Functionality](https://github.com/David-Hien/Unit-3/blob/main/Project.md#criteria-d-functionality)
 6. [Apendix](https://github.com/David-Hien/Unit-3/blob/main/Project.md#apendix-as-of-314pm-apr-18)
 7. [Citation](https://github.com/David-Hien/Unit-3/blob/main/Project.md#citation)
 

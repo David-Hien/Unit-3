@@ -136,6 +136,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 2. KivyMD library
 3. Relation database
 4. SQLAlchemy, ORM (Object-relational mapping)
+5. Guard clause - 
 
 ### Login Screen
 
@@ -281,6 +282,49 @@ Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will
 ```
 
 After building the UI, I'll now move to creating the python code for the Login screen.
+
+***Programming the UX with python***
+
+First, I want to be able view the GUI/window of the app, make a class with the name ```LoginScreen(MDScreen)``` inheriting from MDScreen (leave empty for now) and another class ```app_GUI(MDApp)``` inheriting from MDApp to build the app. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
+
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+    
+
+class app_GUI(MDApp):
+    """ This class creates the GUI for the app"""
+
+    def build(self):
+        return
+
+
+gui = app_GUI()
+gui.run()
+
+```
+
+With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code. Secondly, create the method for login that takes the input value from the two TextEditFields: email and password. Also, include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
+
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        # Store the values inputed
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+        
+        # Stops the method if either inputs is empty
+        if not email_entered or not pass_entered:
+            print("Input required")
+            return
+
+```
+
+
+
 
 
 

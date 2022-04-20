@@ -56,12 +56,12 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ***Figure 1:*** Sketch of purposed solution's wireframe
 
-***Fig.1*** is a wireframe showing a total of 4 screens - LoginScreen, RegisterScreen, HomeScreen, and TableSscreen - connected via buttons.
-- The LoginScreen and RegisterScreen are connected via the "Register"/"Login" buttons.
-- From the RegisterScreen, registering will automatically send the user to the LoginScreen.
-- From the LoginScreen, logging in will automatically send the user to the HomeScreen.
-- From the HomeScreen, the user can access the TableScreen via "Table", or chose go back to the LoginScreen via "Logout".
-- From the TableScreen, return to the HomeScreen via "Back"
+***Fig.1*** is a wireframe showing a total of 4 screens - ```LoginScreen```, ```RegisterScreen```, ```HomeScreen```, and ```TableSscreen``` - connected via buttons.
+- The ```LoginScreen``` and ```RegisterScreen``` are connected via the "Register"/"Login" buttons.
+- From the ```RegisterScreen```, registering will automatically send the user to the ```LoginScreen```.
+- From the ```LoginScreen```, logging in will automatically send the user to the ```HomeScreen```.
+- From the ```HomeScreen```, the user can access the ```TableScreen``` via "Table", or chose go back to the ```LoginScreen``` via "Logout".
+- From the ```TableScreen```, return to the ```HomeScreen``` via "Back"
 
 ### System Diagram
 
@@ -154,7 +154,7 @@ from kivymd.uix.screen import MDScreen
 
 ***Creating the UI with KivyMD***
 
-The first step to creating a Login screen is designing and making the interface. I'll be using KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a SreenManager, which is used to manage multiple screens, then include all the screens/pages in the application as follow.
+The first step to creating a Login screen is designing and making the interface. I'll be using KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application as follow.
 
 ``` .kv
 ScreenManager:
@@ -177,7 +177,7 @@ ScreenManager:
         id: TableScreen
 ```
 
-Then, proceed to create the Login screen. Firstly, I set the background as an image using FitImage inside an MDBoxLayout that covers the whole window.
+Then, proceed to create the Login screen. Firstly, I set the background as an image using ```FitImage``` inside an ```MDBoxLayout``` that covers the whole window.
 
 ``` .kv
 # Define the login screen
@@ -190,7 +190,7 @@ Then, proceed to create the Login screen. Firstly, I set the background as an im
             opacity: .85
 ```
 
-Secondly, add an MDCard and an MDBoxLayout inside of it. This will hold all the elements (other than the background) of the Login screen.
+Secondly, add an ```MDCard``` and an ```MDBoxLayout``` inside of it. This will hold all the elements (other than the background) of the Login screen.
 
 ``` .kv
 # Define the login screen
@@ -213,7 +213,7 @@ Secondly, add an MDCard and an MDBoxLayout inside of it. This will hold all the 
             padding: [dp(20), dp(60)]
 ```
 
-Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and two MDTextFields for the email and password input.
+Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and two ```MDTextField```s for the email and password input.
 
 ``` .kv
 # Define the login screen
@@ -247,7 +247,7 @@ Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and
                 icon_right: "eye-off"
 ```
 
-Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will run a method - I'm going to discuss later, [here]() - to check whether the login information is valid and log the user in. The ***Register*** button will move the user to the Register screen.
+Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will run a method to check whether the login information is valid and log the user in. The ***Register*** button will move the user to the Register screen.
 
 ``` .kv
 # Define the login screen
@@ -285,7 +285,7 @@ After building the UI, I'll now move to creating the python code for the Login s
 
 ***Programming the UX with python***
 
-First, I want to be able view the GUI/window of the app, make a class with the name ```LoginScreen(MDScreen)``` inheriting from MDScreen (leave empty for now) and another class ```app_GUI(MDApp)``` inheriting from MDApp to build the app. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
+First, I want to be able view the GUI/window of the app, make a class with the name ```LoginScreen(MDScreen)``` inheriting from ```MDScreen``` (leave empty for now) and another class ```app_GUI(MDApp)``` inheriting from ```MDApp``` to build the app. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -304,7 +304,7 @@ gui.run()
 
 ```
 
-With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code. Secondly, create the method for login that takes the input value from the two TextEditFields: email and password. Also, include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
+With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code. Secondly, create the ```try_login(self)``` method for login that takes the input value from the two ```TextEditField```s: email and password. Also, include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
 
 ``` python
 class LoginScreen(MDScreen):

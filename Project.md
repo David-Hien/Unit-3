@@ -136,9 +136,92 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 2. KivyMD library
 3. Relation database
 4. SQLAlchemy, ORM (Object-relational mapping)
-5. Guard clause - 
+5. Guard clause
 
 ### Login Screen
+
+***Setting up the database with ORM and SQLAlchemy***
+
+The database plays two important roles in the application, managing the users and Shoes. I create a seperate python file ```database_models.py``` specifically for handling the database. To start with, import the necessary modules and declare ```Base```.
+
+``` python
+# Import database_models
+from sqlalchemy import Column, Integer, String, create_engine, ForeignKey
+from sqlalchemy.orm import declarative_base
+
+# Call Base
+Base = declarative_base()
+
+```
+
+Next, make two classes, one for each tables: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes. The ```users(Base)``` class has 4 rows: ```id``` (primary key), ```username```, ```email```, and ```password```.
+
+``` python
+class users(Base):
+    """ This class represents the users table"""
+
+    # Create new table for users
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255))
+    email = Column(String(255), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+
+    # Attributes of users, used for input
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
+        
+```
+
+The ```Shoes(Base)``` class has 8 rows: ```id``` (primary key), ```brand```, ```model```, ```size```, ```material```, ```color```, ```price```, and ```user_id```. With ```user_id``` being the ***Foreign Key*** that links the shoe with a user.
+
+``` python
+class Shoes(Base):
+    """ This class represents the Shoes table"""
+
+    # Create new table for Shoes
+    __tablename__ = "Shoes"
+    id = Column(Integer, primary_key=True)
+    brand = Column(String(255))
+    model = Column(String(255))
+    size = Column(String(255))
+    material = Column(String(255))
+    color = Column(String(255))
+    price = Column(String(255))
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    # Attributes of Shoes, used for input
+    def __int__(self, brand, model, size, material, color, price, user_id):
+        self.brand = brand
+        self.model = model
+        self.size = size
+        self.material = material
+        self.color = color
+        self.price = price
+        self.user_id = user_id
+
+```
+
+Lastly, I have to import this file into the ```main.py``` file where the app will be running from. In addition, create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assigning the database handler as ```session```.
+
+``` python
+# Import from SQLAlchemy the function to connect to db
+from sqlalchemy import create_engine
+
+# Function to create a session
+from sqlalchemy.orm import sessionmaker
+from database_models import Base, users, Shoes
+
+# Creates the database
+db_engine = create_engine("sqlite:///orm_database.db")
+Base.metadata.create_all(db_engine)
+Base.metadata.bind = db_engine
+db_session = sessionmaker(bind=db_engine)
+session = db_session()
+
+```
 
 ***Instal and import KivyMD***
 
@@ -323,7 +406,27 @@ class LoginScreen(MDScreen):
 
 ```
 
+The next step is to make two boolean expressions to check two conditions: whether the user exists and whether the password is correct. First, the program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input. In addition, include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database.
 
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        ...
+
+        # Scan the database for the account with the same email
+        current_user = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+                        
+        # Stops the method if the user doesn't exist
+        if not current_user:
+            print("User doesn't exist")
+            return
+                        
+```
 
 
 

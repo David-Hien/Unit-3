@@ -225,7 +225,10 @@ session = db_session()
 
 Password hashing is a method to secure a password by converting it into an encrypted representation of itself. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 
-I allocated a different python file ```password_hash.py``` for this task. To begin hasing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```) for the hash function.
+I allocated a different python file ```password_hash.py``` for this task.
+
+1. To begin hasing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file.
+2. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```) for the hash function.
 
 ``` python
 from passlib.context import CryptContext
@@ -423,7 +426,10 @@ gui.run()
 
 ```
 
-With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code. Secondly, create the ```try_login(self)``` method for login that takes the input value from the two ```TextEditField```s: email and password. Also, include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
+With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code.
+
+1. Create the ```try_login(self)``` method for login that takes the input value from the two ```TextEditField```s: email and password.
+2. Include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -442,7 +448,11 @@ class LoginScreen(MDScreen):
 
 ```
 
-The next step is to make two boolean expressions: one to check whether the user exists and one to check if the input password is correct. Firstly, the program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input. Secondly, include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database. Finally, use ```check_password()``` to check if the input password correlates with the hashed password in the database of the user.
+The next step is to make two boolean expressions: one to check whether the user exists and one to check if the input password is correct.
+
+1. The program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input.
+2. Include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database.
+3. Use ```check_password()``` to check if the input password correlates with the hashed password in the database of the user.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -471,6 +481,7 @@ class LoginScreen(MDScreen):
 ### Register Screen: Creating the UI with KivyMD
 
 I want the Register screen to look like the Login screen, only with several adjustments:
+
 1. An extra ```TextEditField``` for username
 2. The ***Login*** button is swapped with ***Register*** and vice versa
 3. ***Register*** button will be linked to the ```register()``` function
@@ -555,6 +566,80 @@ I want the Register screen to look like the Login screen, only with several adju
                     email_input.text=''
                     password_input.text=''
 ```
+
+### Register Screen: Programming the UX with python
+
+1. Make the class ```RegisterScreen(MDScreen)``` inheriting from ```MDScreen```.
+2. The class has the method ```register()``` which will take the input from the ```TextEditFields``` to create and save a new user into the database.
+3. Inside the ```register()``` method, assign the input values of the three ```TextEditFields``` to a variable.
+4. ***Guard clause*** stop method if any of the input is empty.
+5. Use ```pass_hashed()``` to hash the input password.
+6. Create an object ```new_user``` of the ```users``` class with the input values: ```username```, ```email```, ```password```.
+
+``` python
+class RegisterScreen(MDScreen):
+    """ This class creates the register screen"""
+
+    # This method creates a new user account and add it to the database
+    def register(self):
+        # Store the values inputed
+        username_entered = self.ids.username_input.text
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+
+        # Stops method if input left blank
+        if not username_entered or not email_entered or not pass_entered:
+            print("Input required")
+            return
+
+        # Hash the password (for security)
+        pass_hashed = encrypt_password(pass_entered)
+
+        # Update the database with the new account
+        new_user = users(username=username_entered,
+                         email=email_entered,
+                         password=pass_hashed)
+        
+```
+
+Now, I have to add the ```new_user``` into the ```users``` table. However, if a value contradicts with the rows properties, the program will exit automatically. For example, if the input email already exist in the database, there will be a contradiction because when I defined the rows of the ```users``` table, ```email``` is a ***UNIQUE*** variable, which meant that there can only be one in that column.
+
+Therefore, the program must scan the database to see whether the email has already been used by a user before commiting to avoid program exit.
+
+1. Assign ```is_duplicate``` to the result after querying the database for email duplicates - return ```type: None``` means there is no duplicates, anything else means that the email already exist.
+2. Add a ***guard clause*** to stop the method if there is at least one duplicate.
+3. Use ```session.add()```, which places the object ```new_user``` into a placeholder - pending changes - that can later be added into the database.
+4. Use ```session.commit()``` to ***flush*** - commiting all pending changes - ```session.add(new_user)``` above, which will add it to the database.
+5. Use ```session.close()``` to end the process.
+6. Log the user in and send them to the Home screen by changing the value of ```self.parent.current```.
+
+``` python
+class RegisterScreen(MDScreen):
+    """ This class creates the register screen"""
+
+    # This method creates a new user account and add it to the database
+    def register(self):
+        ...
+
+        # Scan the database for the account with the same email
+        is_duplicate = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+
+        # Stops method if email already linked to a user
+        if is_duplicate:
+            print("Email already linked to an account.")
+            return
+
+        # Add new_user to the table
+        session.add(new_user)
+        session.commit()
+        session.close()
+        self.parent.current = "LoginScreen"
+
+```
+
+
 
 
 

@@ -34,12 +34,12 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 
 ### Success Criteria
 
-1. User is able to Create, Add, Edit, Delete data in the table
-2. The application has a login and register page
-3. The login information and database is secured and the password is hashed
-4. Function to sort the table based on different factors
-5. Function to search specific information from a defined range
-6. Uses OOP (Object-oriented programming)
+1. User is able to Add and Remove data in the table
+2. User is able to Edit existing data
+3. The application has a login and register page
+4. The login information and database is secured and the password is hashed
+5. Function to sort the table based on different factors
+6. Follow good coding practises, which allow for future extensions by other developers
 
 
 ## Criteria B: Solution Overview

@@ -138,9 +138,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 4. SQLAlchemy, ORM (Object-relational mapping)
 5. Guard clause
 
-### Login Screen
-
-***Setting up the database with ORM and SQLAlchemy***
+### Setting up the database with ORM and SQLAlchemy
 
 The database plays two important roles in the application, managing the users and Shoes. I create a seperate python file ```database_models.py``` specifically for handling the database. To start with, import the necessary modules and declare ```Base```.
 
@@ -223,7 +221,7 @@ session = db_session()
 
 ```
 
-***Password hashing***
+### Password hashing
 
 Password hashing is a method to secure a password by converting it into an encrypted representation of itself. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 
@@ -261,7 +259,7 @@ from password_hash import encrypt_password, check_password
 
 ```
 
-***Instal and import KivyMD***
+### Instal and import KivyMD
 
 Before I can start programming the Login screen, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to imported from KivyMD as follow.
 
@@ -273,7 +271,7 @@ from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
 ```
 
-***Creating the UI with KivyMD***
+### Login Screen: Creating the UI with KivyMD
 
 The first step to creating a Login screen is designing and making the interface. I'll be using KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application as follow.
 
@@ -404,7 +402,7 @@ Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will
 
 After building the UI, I'll now move to creating the python code for the Login screen.
 
-***Programming the UX with python***
+### Login Screen: Programming the UX with python
 
 First, I want to be able view the GUI/window of the app, make a class with the name ```LoginScreen(MDScreen)``` inheriting from ```MDScreen``` (leave empty for now) and another class ```app_GUI(MDApp)``` inheriting from ```MDApp``` to build the app. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
 
@@ -470,7 +468,93 @@ class LoginScreen(MDScreen):
                         
 ```
 
+### Register Screen: Creating the UI with KivyMD
 
+I want the Register screen to look like the Login screen, only with several adjustments:
+1. An extra ```TextEditField``` for username
+2. The ***Login*** button is swapped with ***Register*** and vice versa
+3. ***Register*** button will be linked to the ```register()``` function
+
+``` .kv
+<RegisterScreen>
+    MDBoxLayout:
+        orientation: "vertical"
+
+        FitImage:
+            source: 'shoez_login_background.jpg'
+            opacity: .85
+
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: None, None
+        size: "400dp", "500dp"
+        elevation: 10
+        # For colors: red, green, blue, alpha
+        md_bg_color: 229/255, 170/255, 140/255, 0.6
+        radius: 20, 20, 20, 20
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: .8, 1
+            pos_hint: {"center_x": .5, "center_y": .5}
+            spacing: dp(15)
+            padding: [dp(20), dp(40)]
+
+            MDLabel:
+                id: name_label
+                text: "Shoez"
+                halign: "center"
+                font_style: "H1"
+                color: 1, 1, 1, 1
+
+            MDTextField:
+                id: username_input
+                hint_text: "username"
+                color: 1, 1, 1, 1
+                required: True
+                icon_right: "account"
+
+            MDTextField:
+                id: email_input
+                hint_text: "email"
+                color: 1, 1, 1, 1
+                required: True
+                icon_right: "email"
+
+            MDTextField:
+                id: password_input
+                hint_text: "password"
+                color: 1, 1, 1, 1
+                password: True
+                required: True
+                icon_right: "eye-off"
+
+            MDRaisedButton:
+                id: register_button
+                text: "Register"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                on_release:
+                    root.register()
+                    username_input.text=''
+                    email_input.text=''
+                    password_input.text=''
+
+            MDRaisedButton:
+                id: login_button
+                text: "Login"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                md_bg_color: 0, 0, 0, .3
+                on_release:
+                    root.parent.current='LoginScreen'
+                    username_input.text=''
+                    email_input.text=''
+                    password_input.text=''
+```
 
 
 

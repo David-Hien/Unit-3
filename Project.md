@@ -794,9 +794,14 @@ The UI elements for the Table screen:
 
 #### UX
 
-Make two special methods - will be used frequently later in the code:
+Some methods in this class have repetitive command executions, therefore, it's advantageous to place the repeated code into a method and call the method instead of typing it out.
+
+Make five special methods - will be used frequently later in the code:
 1. ```current_user()``` to query and return the current user's data.
 2. ```get_shoes()``` to query and return the ```Shoes``` table as a list.
+3. ```get_row()``` to convert the value in the input fields into a list.
+4. ```update_table()``` to update the table with the list from ```get_shoes()```.
+5. ```clear()``` to clear the inputs.
 
 ``` python
 class TableScreen(MDScreen):
@@ -827,6 +832,52 @@ class TableScreen(MDScreen):
             result.append([q.id, q.brand, q.model, q.size, q.material, q.color, q.price])
 
         return result
+        
+    # This method takes the input from the values in the TextEdit fields
+    # and converted it into a row
+    def get_row(self):
+        # Assign variables to store the values of each TextEdit fields
+        brand = self.ids.brand.text
+        model = self.ids.model.text
+        size = self.ids.size.text
+        material = self.ids.material.text
+        color = self.ids.color.text
+        price = self.ids.price.text
+
+        if (
+                not brand or
+                not model or
+                not size or
+                not material or
+                not color or
+                not price):
+            print("Input missing")
+            return
+
+        # Format the values correctly for update
+        row = (brand, model, size, material, color, price)
+        return row
+        
+    # This method updates the table on display
+    def update_table(self):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Updates the table
+        self.data_tables.update_row_data(
+            None, result
+        )
+
+    # This method clears the inputs
+    def clear(self):
+        # Clear all TextEdit fields
+        self.ids.shoe_id.text = ""
+        self.ids.brand.text = ""
+        self.ids.model.text = ""
+        self.ids.size.text = ""
+        self.ids.material.text = ""
+        self.ids.color.text = ""
+        self.ids.price.text = ""
         
 ```
 
@@ -934,9 +985,140 @@ class TableScreen(MDScreen):
         
 ```
 
+Create ```edit_save()``` method.
+
+Requires:
+- ```shoe_id```
+- Value of inputs - can be acquired from ```get_row()```
 
 
+1. ***Guard clause***: only run if ```id``` is specified.
+2. ***Guard clause***: only run if all the inputs are specified.
+3. Use ```session.query(table_name).filter(conditionals).update(edit_data)``` to change the data of a row.
+4. Update/reload the table and clear the inputs.
 
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+    
+    # This method runs when the button "Save" is pressed
+    def edit_save(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        # Row data
+        updated_row = self.get_row()
+        if not updated_row:
+            return
+
+        brand, model, size, material, color, price = updated_row
+
+        # Update the Shoes table with the new data
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            update({Shoes.brand: brand,
+                    Shoes.model: model,
+                    Shoes.size: size,
+                    Shoes.material: material,
+                    Shoes.color: color,
+                    Shoes.price: price})
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+        
+```
+
+Create ```add_item()``` method.
+
+Requires:
+- Value of inputs - can be acquired from ```get_row()```
+
+Add a new data row - refer ```register()``` method in ```RegisterScreen``` class.
+
+***Important note***: a ```user_id``` is included as a ```ForeignKey``` to link to the ```users``` table.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+    
+    # This method adds a new data row
+    def add_item(self):
+        # Row data
+        new_row = self.get_row()
+        if not new_row:
+            return
+
+        brand, model, size, material, color, price = new_row
+
+        # Update the Shoes table with the new data
+        new_shoe = Shoes(brand=brand,
+                         model=model,
+                         size=size,
+                         material=material,
+                         color=color,
+                         price=price,
+                         user_id=self.current_user().id)
+
+        session.add(new_shoe)
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+        
+```
+
+Create ```remove_item()``` method.
+
+Requires:
+- ```shoe_id```
+
+Removes a data row using ```session.query(table_name).filter(conditionals).delete()```
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+    
+    # This method removes the data row
+    def remove_item(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            delete()
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+        
+```
+
+### Screenshot of UI
+
+<img width="912" alt="Screen Shot 2022-04-22 at 0 06 47" src="https://user-images.githubusercontent.com/89367058/164488615-43e85080-a0c8-4e4c-ba4e-c565e40d19c8.png"><img width="912" alt="Screen Shot 2022-04-22 at 0 06 52" src="https://user-images.githubusercontent.com/89367058/164488648-52b81bb5-dd8b-4a48-adc7-2a7a9ce66393.png">
+<img width="912" alt="Screen Shot 2022-04-22 at 0 07 18" src="https://user-images.githubusercontent.com/89367058/164488660-e9369805-6032-4928-9a87-504e546b23b7.png">
+<img width="912" alt="Screen Shot 2022-04-22 at 0 07 33" src="https://user-images.githubusercontent.com/89367058/164488663-f3f20e34-ed7c-4a92-8a0e-34805109a324.png">
 
 
 ### Software Update

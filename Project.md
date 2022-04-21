@@ -1176,6 +1176,9 @@ The software will receive updates as per user's requests. Since the number of us
 
 ## Criteria D: Functionality
 
+### Video
+
+https://drive.google.com/drive/folders/1FzhJcLJAgGHs3IJzMiZN1yAEJu4Z7Sej?usp=sharing
 
 ## Apendix
 

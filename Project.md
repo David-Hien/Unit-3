@@ -150,7 +150,7 @@ Base = declarative_base()
 
 ```
 
-Next, make two classes, one for each table: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes. The ```users(Base)``` class has 4 rows: ```id``` (primary key), ```username```, ```email```, and ```password```.
+Make two classes, one for each table: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes.
 
 ``` python
 class users(Base):
@@ -168,12 +168,8 @@ class users(Base):
         self.username = username
         self.email = email
         self.password = password
-        
-```
 
-The ```Shoes(Base)``` class has 8 rows: ```id``` (primary key), ```brand```, ```model```, ```size```, ```material```, ```color```, ```price```, and ```user_id```. With ```user_id``` being the ***Foreign Key*** that links the shoe with a user.
 
-``` python
 class Shoes(Base):
     """ This class represents the Shoes table"""
 
@@ -200,7 +196,8 @@ class Shoes(Base):
 
 ```
 
-Lastly, I have to import the classes into the ```main.py``` file where the app will be running from. In addition, create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assigning the database handler as ```session```.
+1. Import the classes into the ```main.py``` file where the app will be running from.
+2. Create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assign the database handler as ```session```.
 
 ``` python
 # Import from SQLAlchemy the function to connect to db
@@ -221,12 +218,12 @@ session = db_session()
 
 ### Password hashing
 
-Password hashing is a method to secure a password by converting it into an encrypted representation of itself. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
+Password hashing is used to secure a password by encrypting it. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 
 I allocated a different python file ```password_hash.py``` for this task.
 
-1. To begin hashing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file.
-2. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```) for the hash function.
+1. Install the passlib library. In the terminal, run the command ```pip install passlib```, and import it into the python file.
+2. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```, etc.) for the hash function.
 
 ``` python
 from passlib.context import CryptContext
@@ -262,7 +259,8 @@ from password_hash import encrypt_password, check_password
 
 ### Instal and import KivyMD
 
-Before I can start programming the Login screen, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to import from KivyMD as follows.
+1. Install the KivyMD library via the terminal using the command line ```pip install kivymd```.
+2. Import the library into ```main.py```.
 
 ``` python
 # Import kivymd for GUI design
@@ -274,7 +272,7 @@ from kivymd.uix.screen import MDScreen
 
 ### Login Screen: Creating the UI with KivyMD
 
-The first step to creating a Login screen is designing and making the interface. I'll be using the KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application as follows.
+Assign a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application.
 
 ``` .kv
 ScreenManager:
@@ -297,7 +295,11 @@ ScreenManager:
         id: TableScreen
 ```
 
-Then, proceed to create the Login screen. Firstly, I set the background as an image using ```FitImage``` inside an ```MDBoxLayout``` that covers the whole window.
+1. Set the background as an image using ```FitImage``` inside an ```MDBoxLayout``` that covers the whole window.
+2. Add an ```MDCard``` and inside it, an ```MDBoxLayout```, which will hold all the elements (other than the background) of the Login screen.
+3. Add an ```MDLabel``` for the application name ***Shoez***
+4. Add two ```MDTextField```s for the email and password input.
+5. Add two buttons: ***Login*** and ***Register***. The ***Login*** button will run a method to check whether the login information is valid and log the user in. The ***Register*** button will move the user to the Register screen.
 
 ``` .kv
 # Define the login screen
@@ -308,13 +310,7 @@ Then, proceed to create the Login screen. Firstly, I set the background as an im
         FitImage:
             source: 'shoez_login_background.jpg'
             opacity: .85
-```
 
-Secondly, add an ```MDCard``` and an ```MDBoxLayout``` inside of it. This will hold all the elements (other than the background) of the Login screen.
-
-``` .kv
-# Define the login screen
-<LoginScreen>:
     MDCard:
         orientation: "vertical"
         pos_hint: {"center_x": .5, "center_y": .5}
@@ -331,19 +327,7 @@ Secondly, add an ```MDCard``` and an ```MDBoxLayout``` inside of it. This will h
             pos_hint: {"center_x": .5, "center_y": .5}
             spacing: dp(15)
             padding: [dp(20), dp(60)]
-```
-
-Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and two ```MDTextField```s for the email and password input.
-
-``` .kv
-# Define the login screen
-<LoginScreen>:
-    MDCard:
-        ...
-
-        MDBoxLayout:
-            ...
-
+            
             MDLabel:
                 id: name_label
                 text: "Shoez"
@@ -365,19 +349,7 @@ Next, I'll include the name of the application - ***Shoez*** - as an MDLabel and
                 password: True
                 required: True
                 icon_right: "eye-off"
-```
-
-Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will run a method to check whether the login information is valid and log the user in. The ***Register*** button will move the user to the Register screen.
-
-``` .kv
-# Define the login screen
-<LoginScreen>:
-    MDCard:
-        ...
-
-        MDBoxLayout:
-            ...
-            
+                
             MDRaisedButton:
                 id: login_button
                 text: "Login"
@@ -400,8 +372,6 @@ Lastly, two buttons: ***Login*** and ***Register***. The ***Login*** button will
                     email_input.text=''
                     password_input.text=''
 ```
-
-After building the UI, I'll now move to creating the python code for the Login screen.
 
 ### Login Screen: Programming the UX with python
 

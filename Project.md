@@ -273,7 +273,9 @@ from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
 ```
 
-### Login Screen: Creating the UI with KivyMD
+### Login Screen
+
+#### Creating the UI with KivyMD
 
 Assign a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application.
 
@@ -376,7 +378,7 @@ ScreenManager:
                     password_input.text=''
 ```
 
-### Login Screen: Programming the UX with python
+#### Programming the UX with python
 
 1. Make two classes ```LoginScreen(MDScreen)``` and ```app_GUI(MDApp)```.
 2. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
@@ -449,7 +451,9 @@ class LoginScreen(MDScreen):
                         
 ```
 
-### Register Screen: Creating the UI with KivyMD
+### Register Screen
+
+#### UI
 
 I want the Register screen to look like the Login screen, only with several adjustments:
 
@@ -538,7 +542,7 @@ I want the Register screen to look like the Login screen, only with several adju
                     password_input.text=''
 ```
 
-### Register Screen: Programming the UX with python
+#### UX
 
 1. In the ```RegisterScreen(MDScreen)``` class, add the ```register()``` method, which will take the input from the ```TextEditFields``` to create and save a new user into the database.
 3. Assign the input values of the three ```TextEditFields``` to a variable.
@@ -610,6 +614,8 @@ class RegisterScreen(MDScreen):
 
 ### Home screen
 
+#### UI
+
 The Home screen shows a welcome message displaying the user's username with two buttons: ***Tables*** and ***Logout***.
 
 ``` .kv
@@ -646,6 +652,8 @@ The Home screen shows a welcome message displaying the user's username with two 
             root.parent.current = "LoginScreen"
 ```
 
+#### UX
+
 The ```HomeScreen(MDScreen)``` class will have the ```on_pre_enter()``` method, which runs prior to loading the window. This method will find and display the welcome message.
 
 ``` python
@@ -669,6 +677,263 @@ class HomeScreen(MDScreen):
 
 ### Table screen
 
+The Table screen is the most important screen of the application. It displays the ```Shoes``` table and allow the user to ***Edit/Add/Remove*** data freely. Also, it has a feature to sort the table based on any data column.
+
+#### UI
+
+The UI elements for the Table screen:
+- ***Back*** button
+- One ```TextEditField``` for each column.
+- ***Save***, ***Add***, ***Clear***, and ***Remove*** buttons
+
+``` .kv
+<TableScreen>
+    MDRaisedButton:
+        id: back_to_home_button
+        text: "Back"
+        pos_hint: {"right": .15, "top": .95}
+        size_hint: None, None
+        md_bg_color: .4, .4, .4, 1
+        on_release:
+            root.parent.current = "HomeScreen"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "top": .3}
+        size_hint: .9, .3
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"top": 1}
+            size_hint: 1, .6
+
+            MDLabel:
+                text: "Edit"
+                font_size: 30
+                pos_hint: {"left": .05, "bottom": .2}
+                size_hint: .05, .5
+
+            MDTextField:
+                id: shoe_id
+                hint_text: "id"
+                pos_hint: {"left": .1, "bottom": .2}
+                size_hint: .03, .5
+
+            MDTextField:
+                id: brand
+                hint_text: "brand"
+                pos_hint: {"left": .2, "bottom": .2}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: model
+                hint_text: "model"
+                pos_hint: {"left": .35, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: size
+                hint_text: "size"
+                pos_hint: {"left": .5, "bottom": 0}
+                size_hint: .05, .5
+
+            MDTextField:
+                id: material
+                hint_text: "material"
+                pos_hint: {"left": .6, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: color
+                hint_text: "color"
+                pos_hint: {"left": .75, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: price
+                hint_text: "price"
+                pos_hint: {"left": .9, "bottom": 0}
+                size_hint: .05, .5
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"bottom": 0}
+            size_hint: 1, .4
+
+            MDRaisedButton:
+                text: "Save"
+                size_hint: .1, .5
+                pos_hint : {"center_x": .2, "center_y": .7}
+                on_release:
+                    root.edit_save()
+
+            MDRaisedButton:
+                text: "Add"
+                md_bg_color: 0, .8, 0, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .4, "center_y": .7}
+                on_release:
+                    root.add_item()
+
+            MDRaisedButton:
+                text: "Clear"
+                md_bg_color: .4, .4, .4, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .6, "center_y": .7}
+                on_release:
+                    root.clear()
+
+            MDRaisedButton:
+                text: "Remove"
+                md_bg_color: 1, .1, .1, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .8, "center_y": .7}
+                on_release:
+                    root.remove_item()
+```
+
+#### UX
+
+Make two special methods - will be used frequently later in the code:
+1. ```current_user()``` to query and return the current user's data.
+2. ```get_shoes()``` to query and return the ```Shoes``` table as a list.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    # Call table
+    data_tables = None
+
+    # This method queries the users table and return the current user
+    def current_user(self):
+        current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
+
+        # Query the user
+        current_user = (session.query(users).
+                        filter(users.email == current_user_email).
+                        first())
+
+        return current_user
+
+    # This method queries the Shoes table and return its data as a list
+    def get_shoes(self):
+        # Query the Shoes table for rows with matching Foreign key to the user
+        query = session.query(Shoes).filter(Shoes.user_id == self.current_user().id)
+        session.close()
+
+        # Append the results into a list then return it
+        result = []
+        for q in query:
+            result.append([q.id, q.brand, q.model, q.size, q.material, q.color, q.price])
+
+        return result
+        
+```
+
+Make a ```on_pre_enter()``` method to create the table and ```check_pressed()``` that runs when a box on the data row is checked.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+
+    def current_user(self):
+        ...
+
+    def get_shoes(self):
+        ...
+        
+    # Call table
+    data_tables = None
+
+    def on_pre_enter(self, *args):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Creates the table
+        self.data_tables = MDDataTable(
+            size_hint=(.9, .5),
+            pos_hint={"center_x": .5, "center_y": .5},
+            check=True,
+            column_data=[
+                ("id", dp(20), self.sort_id),
+                ("brand", dp(35), self.sort_brand),
+                ("model", dp(35), self.sort_model),
+                ("size", dp(20), self.sort_size),
+                ("material", dp(30), self.sort_material),
+                ("color", dp(20), self.sort_color),
+                ("price", dp(20), self.sort_price)
+            ],
+            row_data=result,
+        )
+        self.data_tables.bind(on_check_press=self.check_pressed)
+        self.add_widget(self.data_tables)
+        
+    # This method takes the value on the selected row of the table
+    # and prints it on the according TextEdit fields
+    def check_pressed(self, table, row):
+        # Assign variables to store the values of the selected row
+        shoe_id, brand, model, size, material, color, price = row
+
+        # Print the values on the TextEdit fields
+        self.ids.shoe_id.text = shoe_id
+        self.ids.brand.text = brand
+        self.ids.model.text = model
+        self.ids.size.text = size
+        self.ids.material.text = material
+        self.ids.color.text = color
+        self.ids.price.text = price
+        
+```
+
+To sort the table based on the data columns, I had to refer to an online resource - https://kivymd.readthedocs.io. In the the DataTables section<sup>[[6]](https://kivymd.readthedocs.io/en/latest/components/datatables/)</sup>, there are examples of sorting methods, which I'll using for this program.
+
+When the user click on a column heading, the table will rearrange and update itself (independent from the database).
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+    
+    # These methods are toggles used for sorting the table
+    def get_sort(self, data, column_number):
+        return zip(
+            *sorted(
+                enumerate(data),
+                key=lambda l: l[1][column_number]
+            )
+        )
+
+    # Sort based on id number
+    def sort_id(self, data):
+        return self.get_sort(data, 0)
+
+    # Sort based on brand name
+    def sort_brand(self, data):
+        return self.get_sort(data, 1)
+
+    # Sort based on model
+    def sort_model(self, data):
+        return self.get_sort(data, 2)
+
+    # Sort based on size
+    def sort_size(self, data):
+        return self.get_sort(data, 3)
+
+    # Sort based on material
+    def sort_material(self, data):
+        return self.get_sort(data, 4)
+
+    # Sort based on color
+    def sort_color(self, data):
+        return self.get_sort(data, 5)
+
+    # Sort based on price
+    def sort_price(self, data):
+        return self.get_sort(data, 6)
+        
+```
+
 
 
 
@@ -681,7 +946,7 @@ The software will receive updates as per user's requests. Since the number of us
 ## Criteria D: Functionality
 
 
-## Apendix (as of 3:14PM, Apr 18)
+## Apendix
 
 
 ## Citation

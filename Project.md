@@ -20,15 +20,15 @@ My client's name is Nagisa Sato. She has a collection of shoes. At the moment, m
 
 My proposed solution is to create an application that uses Python as the main programming language, Kivymd Library for the GUI (Graphical User Interface), and SQLAlchemy to manipulate the database. The app will consist of a Login/Register screen, a page to show the shoe collections, and another page for the user to manually edit the collections. The table can be sorted based on factors (eg. name, price, color) of the user's choice.
 
-***Python***
+#### Python
 
 I choose Python as the programming language for the following reasons. Firstly, Python is widely used in various areas thanks to its simple syntax and focus on natural language, making it beginner friendly at the same time not losing much versatility. According to Stackoverflow blog by David Robinson<sup>[[1]](https://stackoverflow.blog/2017/09/06/incredible-growth-python/)</sup>, Python is the fastest growing programming language, and is predicted to be the most in-demand language in 2020, which was proven to be true - according to PYPL PopularitY of Programming Language<sup>[[2]](https://pypl.github.io/PYPL.html)</sup>, Python ranked first with the most tutorial video views on Google. Also, because I'm familiar with this language, the process of developing this product will be more efficient. Secondly, Python supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it much easier to navigate and understand the code, which means easy to locate errors, high code-reusability, and other developers - who might work on the project after you - won't have a hard time.
 
-***Kivymd Library***
+#### Kivymd Library
 
 The Kivymd Library is an open-source library used as a framework for cross-platform applications<sup>[[3]](https://kivymd.readthedocs.io/en/latest/)</sup>. It is a tool for creating GUI (Graphical User Interface) for applications, which serves as a communicator between the input (keyboard, mouse, multitouch events, etc.) and the program, as well as between the program and the output (screen). This is an essential part of any application because it exponentially increases the app's usability and desirability - easier to understand, use, and charming visual aesthetics.
 
-***SQLAlchemy and ORM***
+#### SQLAlchemy and ORM
 
 To operate the database, I choose to use SQLAlchemy. It's a declarative query language that is common for relational databases. Also, when identifying the issue and planning out the ER (Entity Relation) diagram and table, I noticed that classes have relation to each other. In this instance, a user has many shoes, and a shoe only has one user. In order to effectively address this, I choose to use an ORM (Object Relational Mapper) supported language, and among them, SQLAlchemy is highly compatible with Python that allows for Python construct<sup>[[4]](https://www.pythoncentral.io/overview-sqlalchemys-expression-language-orm-queries/)</sup>.
 
@@ -138,7 +138,9 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ### Setting up the database with ORM and SQLAlchemy
 
-The database plays two important roles in the application, managing the users and Shoes. I created a separate python file ```database_models.py``` specifically for handling the database. To start with, import the necessary modules and declare ```Base```.
+The database plays two important roles in the application, managing the users and Shoes. I created a separate python file ```database_models.py``` specifically for handling the database.
+
+Import the necessary modules and declare ```Base```.
 
 ``` python
 # Import database_models
@@ -150,7 +152,7 @@ Base = declarative_base()
 
 ```
 
-Make two classes, one for each table: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes.
+Make two classes, one for each table: ```users(Base)``` and ```Shoes(Base)```.
 
 ``` python
 class users(Base):
@@ -197,7 +199,8 @@ class Shoes(Base):
 ```
 
 1. Import the classes into the ```main.py``` file where the app will be running from.
-2. Create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assign the database handler as ```session```.
+2. Create the database with SQLAlchemy.
+3. Assign the database handler as ```session```.
 
 ``` python
 # Import from SQLAlchemy the function to connect to db
@@ -218,12 +221,12 @@ session = db_session()
 
 ### Password hashing
 
-Password hashing is used to secure a password by encrypting it. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
+Hashing is encrypting a value to secure it. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. I'll be using the PBKDF2-SHA256 hash, which is one of the most powerful hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup>. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 
 I allocated a different python file ```password_hash.py``` for this task.
 
 1. Install the passlib library. In the terminal, run the command ```pip install passlib```, and import it into the python file.
-2. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```, etc.) for the hash function.
+2. Use CryptContext to set the parameters for the hash function.
 
 ``` python
 from passlib.context import CryptContext
@@ -237,7 +240,7 @@ pwd_context = CryptContext(
 
 ```
 
-Then, create two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input and the hashed password.
+Create two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input and the hashed password.
 
 ``` python
 def encrypt_password(password):
@@ -375,7 +378,9 @@ ScreenManager:
 
 ### Login Screen: Programming the UX with python
 
-First, I want to be able view the GUI/window of the app, make a class with the name ```LoginScreen(MDScreen)``` inheriting from ```MDScreen``` (leave empty for now) and another class ```app_GUI(MDApp)``` inheriting from ```MDApp``` to build the app. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
+1. Make two classes ```LoginScreen(MDScreen)``` and ```app_GUI(MDApp)```.
+2. In ```app_GUI``` , add the method ```build(self)``` to make the app window.
+3. ```run()```
 
 ``` python
 class LoginScreen(MDScreen):
@@ -394,10 +399,8 @@ gui.run()
 
 ```
 
-With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code.
-
 1. Create the ```try_login(self)``` method for login that takes the input value from the two ```TextEditField```s: email and password.
-2. Include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; its main purpose is to increase code readability - to stop the method if either input is empty.
+2. Include a ***guard clause*** - an if-statement that eliminates conditions that may cause error later on, protecting the system from crashing, bugs, and many more; its main purpose is to increase code readability.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -537,9 +540,8 @@ I want the Register screen to look like the Login screen, only with several adju
 
 ### Register Screen: Programming the UX with python
 
-1. Make the class ```RegisterScreen(MDScreen)``` inheriting from ```MDScreen```.
-2. The class has the method ```register()``` which will take the input from the ```TextEditFields``` to create and save a new user into the database.
-3. Inside the ```register()``` method, assign the input values of the three ```TextEditFields``` to a variable.
+1. In the ```RegisterScreen(MDScreen)``` class, add the ```register()``` method, which will take the input from the ```TextEditFields``` to create and save a new user into the database.
+3. Assign the input values of the three ```TextEditFields``` to a variable.
 4. ***Guard clause*** stop method if any of the input is empty.
 5. Use ```pass_hashed()``` to hash the input password.
 6. Create an object ```new_user``` of the ```users``` class with the input values: ```username```, ```email```, ```password```.
@@ -574,12 +576,11 @@ Now, I have to add the ```new_user``` into the ```users``` table. However, if a 
 
 Therefore, the program must scan the database to see whether the email has already been used by a user before committing to avoid program exit.
 
-1. Assign ```is_duplicate``` to the result after querying the database for email duplicates - return ```type: None``` means there are no duplicates, anything else means that the email already exists.
-2. Add a ***guard clause*** to stop the method if there is at least one duplicate.
+1. Assign ```is_duplicate``` to the result after querying the database for email duplicates.
+2. ***Guard clause*** to stop the method if there is at least one duplicate.
 3. Use ```session.add()```, which places the object ```new_user``` into a placeholder - pending changes - that can later be added into the database.
-4. Use ```session.commit()``` to ***flush*** - committing all pending changes - ```session.add(new_user)``` above, which will add it to the database.
-5. Use ```session.close()``` to end the process.
-6. Log the user in and send them to the Home screen by changing the value of ```self.parent.current```.
+4. Use ```session.commit()``` and ```session.close()``` commit the changes.
+5. Move to Home screen.
 
 ``` python
 class RegisterScreen(MDScreen):
@@ -607,6 +608,66 @@ class RegisterScreen(MDScreen):
 
 ```
 
+### Home screen
+
+The Home screen shows a welcome message displaying the user's username with two buttons: ***Tables*** and ***Logout***.
+
+``` .kv
+<HomeScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: 1, .9
+        pos_hint: {"top": 1}
+
+        MDLabel:
+            id: name_label
+            halign: "center"
+            font_style: "H1"
+            color: 0, 0, 0, 1
+
+
+    MDRectangleFlatButton:
+        id: table_button
+        text: "Table"
+        text_color: 55/255, 173/255, 255/255, 1
+        size_hint: .4, None
+        pos_hint: {"center_x": .5, "center_y": .25}
+
+        on_release:
+            root.parent.current = "TableScreen"
+
+    MDRaisedButton:
+        id: logout_button
+        text: "Logout"
+        size_hint: .4, None
+        pos_hint: {"center_x": .5, "center_y": .16}
+        md_bg_color: .4, .4, .4, 1
+        on_release:
+            root.parent.current = "LoginScreen"
+```
+
+The ```HomeScreen(MDScreen)``` class will have the ```on_pre_enter()``` method, which runs prior to loading the window. This method will find and display the welcome message.
+
+``` python
+class HomeScreen(MDScreen):
+    """ This class creates the home screen"""
+
+    # This method runs when loading the window
+    def on_pre_enter(self, *args):
+        # Store the current logged in user's email
+        current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
+
+        # Query the user
+        current_user = (session.query(users).
+                        filter(users.email == current_user_email).
+                        first())
+
+        # Welcome message
+        self.ids.name_label.text = f"Welcome, {current_user.username}"
+
+```
+
+### Table screen
 
 
 

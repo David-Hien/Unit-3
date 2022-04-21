@@ -344,7 +344,7 @@ ScreenManager:
             pos_hint: {"center_x": .5, "center_y": .5}
             spacing: dp(15)
             padding: [dp(20), dp(60)]
-            
+
             MDLabel:
                 id: name_label
                 text: "Shoez"
@@ -356,6 +356,8 @@ ScreenManager:
                 id: email_input
                 hint_text: "email"
                 color: 1, 1, 1, 1
+                helper_text: "Invalid email"
+                helper_text_mode: "on_error"
                 required: True
                 icon_right: "email"
 
@@ -363,10 +365,12 @@ ScreenManager:
                 id: password_input
                 hint_text: "password"
                 color: 1, 1, 1, 1
+                helper_text: "Invalid password"
+                helper_text_mode: "on_error"
                 password: True
                 required: True
                 icon_right: "eye-off"
-                
+
             MDRaisedButton:
                 id: login_button
                 text: "Login"
@@ -510,6 +514,8 @@ I want the Register screen to look like the Login screen, only with several adju
                 id: username_input
                 hint_text: "username"
                 color: 1, 1, 1, 1
+                helper_text: "Invalid username"
+                helper_text_mode: "on_error"
                 required: True
                 icon_right: "account"
 
@@ -517,6 +523,8 @@ I want the Register screen to look like the Login screen, only with several adju
                 id: email_input
                 hint_text: "email"
                 color: 1, 1, 1, 1
+                helper_text: "Invalid email"
+                helper_text_mode: "on_error"
                 required: True
                 icon_right: "email"
 
@@ -524,6 +532,8 @@ I want the Register screen to look like the Login screen, only with several adju
                 id: password_input
                 hint_text: "password"
                 color: 1, 1, 1, 1
+                helper_text: "Invalid password"
+                helper_text_mode: "on_error"
                 password: True
                 required: True
                 icon_right: "eye-off"

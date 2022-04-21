@@ -14,25 +14,23 @@
 
 ### Definition of Problem
 
-My client's name is Nagisa Sato. She has a collection of shoes - both the ones currently in her possesion and the ones she would like to have. At the moment, my client does not use any application or system to organize her collection. For that reason, Nagisa wishes for an application that can store the data of her shoes and is able to organize it base on different factors as to help her keep a better track of the collection. In addition, my client wants to have a "wishlist" - list of shoes that she wants to add to her collection in the future - that is also organized to find the next pair to buy.
+My client's name is Nagisa Sato. She has a collection of shoes. At the moment, my client does not use any application or system to organize her collection. For that reason, Nagisa wishes for an application that can store the data of her shoes and is able to organize it based on different factors to help her keep a better track of the collection.
 
 ### Proposed Solution
 
-My proposed solution is to create an application that uses Python as the main programming language, Kivymd Library for the GUI (Graphical User Interface), and SQLAlchemy to manipulate the database. The app will consist of a Login/Register screen, a page to show the shoe collections, and another page for the user to manually edit the collections. Two other additions are:
-- a search function that can assist the user navigate large databases
-- a sort function that rearrange the collection based on factors (eg. name, price, color) of the user's choice
+My proposed solution is to create an application that uses Python as the main programming language, Kivymd Library for the GUI (Graphical User Interface), and SQLAlchemy to manipulate the database. The app will consist of a Login/Register screen, a page to show the shoe collections, and another page for the user to manually edit the collections. The table can be sorted based on factors (eg. name, price, color) of the user's choice.
 
 ***Python***
 
-I choose Python as the programming language for the following reasons. Firstly, Python is widely used in various areas thanks to it simple syntax and focus on natural language, making it beginner friendly at the same time not losing much versitility. According to Stackoverflow blog by David Robinson<sup>[[1]](https://stackoverflow.blog/2017/09/06/incredible-growth-python/)</sup>, Python is the fastest growing programming language, and is predicted to be the most in-demand language in 2020, which was proven to be true - according to PYPL PopularitY of Programming Language<sup>[[2]](https://pypl.github.io/PYPL.html)</sup>, Python ranked first with the most tutorial video views on Google. Also, because I'm familiar with this language, the process of developing this product will be more efficient. Secondly, Python supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it much easier to navigate and understand the code, which means easy to locate errors, high code-reusability, and other developers - who might work on the project after you - won't have a hard time.
+I choose Python as the programming language for the following reasons. Firstly, Python is widely used in various areas thanks to its simple syntax and focus on natural language, making it beginner friendly at the same time not losing much versatility. According to Stackoverflow blog by David Robinson<sup>[[1]](https://stackoverflow.blog/2017/09/06/incredible-growth-python/)</sup>, Python is the fastest growing programming language, and is predicted to be the most in-demand language in 2020, which was proven to be true - according to PYPL PopularitY of Programming Language<sup>[[2]](https://pypl.github.io/PYPL.html)</sup>, Python ranked first with the most tutorial video views on Google. Also, because I'm familiar with this language, the process of developing this product will be more efficient. Secondly, Python supports OOP (Object-oriented programming). For this application, I believe it is more effective to approach using OOP, because it makes it much easier to navigate and understand the code, which means easy to locate errors, high code-reusability, and other developers - who might work on the project after you - won't have a hard time.
 
 ***Kivymd Library***
 
-The Kivymd Library is an open-source library used as a framework for cross-platform applications<sup>[[3]](https://kivymd.readthedocs.io/en/latest/)</sup>. It is a tool for creating GUI (Graphical User Interface) for applications, which serves as a communicator between the input (keyboard, mouse, multitouch events, etc.) and the program, as well as between the program and the output (screen). This is an essential part of any application because it exponentially increases the app's usability and desirabilty - easier to understand, use, and charming visual aesthetics.
+The Kivymd Library is an open-source library used as a framework for cross-platform applications<sup>[[3]](https://kivymd.readthedocs.io/en/latest/)</sup>. It is a tool for creating GUI (Graphical User Interface) for applications, which serves as a communicator between the input (keyboard, mouse, multitouch events, etc.) and the program, as well as between the program and the output (screen). This is an essential part of any application because it exponentially increases the app's usability and desirability - easier to understand, use, and charming visual aesthetics.
 
 ***SQLAlchemy and ORM***
 
-To operate the database, I choose to use SQLAlchemy. It's a declarative query language that is common for relational databases. Also, when identifying the issue and planing out the ER (Entity Relation) diagram and table, I noticed that classes have relation to each other. In this instance, a user has many shoes, and a shoe only has one user. In order to effectively address this, I choose to use an ORM (Object Relational Mapper) supported language, and among them, SQLAlchemy is highly compatible with Python that allows for Python construct<sup>[[4]](https://www.pythoncentral.io/overview-sqlalchemys-expression-language-orm-queries/)</sup>.
+To operate the database, I choose to use SQLAlchemy. It's a declarative query language that is common for relational databases. Also, when identifying the issue and planning out the ER (Entity Relation) diagram and table, I noticed that classes have relation to each other. In this instance, a user has many shoes, and a shoe only has one user. In order to effectively address this, I choose to use an ORM (Object Relational Mapper) supported language, and among them, SQLAlchemy is highly compatible with Python that allows for Python construct<sup>[[4]](https://www.pythoncentral.io/overview-sqlalchemys-expression-language-orm-queries/)</sup>.
 
 ### Success Criteria
 
@@ -140,7 +138,7 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 ### Setting up the database with ORM and SQLAlchemy
 
-The database plays two important roles in the application, managing the users and Shoes. I create a seperate python file ```database_models.py``` specifically for handling the database. To start with, import the necessary modules and declare ```Base```.
+The database plays two important roles in the application, managing the users and Shoes. I created a separate python file ```database_models.py``` specifically for handling the database. To start with, import the necessary modules and declare ```Base```.
 
 ``` python
 # Import database_models
@@ -152,7 +150,7 @@ Base = declarative_base()
 
 ```
 
-Next, make two classes, one for each tables: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes. The ```users(Base)``` class has 4 rows: ```id``` (primary key), ```username```, ```email```, and ```password```.
+Next, make two classes, one for each table: ```users(Base)``` and ```Shoes(Base)```. Also, give ```__tablename__``` and rows' names and datatypes. The ```users(Base)``` class has 4 rows: ```id``` (primary key), ```username```, ```email```, and ```password```.
 
 ``` python
 class users(Base):
@@ -227,7 +225,7 @@ Password hashing is a method to secure a password by converting it into an encry
 
 I allocated a different python file ```password_hash.py``` for this task.
 
-1. To begin hasing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file.
+1. To begin hashing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file.
 2. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```) for the hash function.
 
 ``` python
@@ -264,7 +262,7 @@ from password_hash import encrypt_password, check_password
 
 ### Instal and import KivyMD
 
-Before I can start programming the Login screen, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to imported from KivyMD as follow.
+Before I can start programming the Login screen, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to import from KivyMD as follows.
 
 ``` python
 # Import kivymd for GUI design
@@ -276,7 +274,7 @@ from kivymd.uix.screen import MDScreen
 
 ### Login Screen: Creating the UI with KivyMD
 
-The first step to creating a Login screen is designing and making the interface. I'll be using KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application as follow.
+The first step to creating a Login screen is designing and making the interface. I'll be using the KivyMD library to create the UI (user interface) for the Login screen and the entire application. Start by assigning a ```SreenManager```, which is used to manage multiple screens, then include all the screens/pages in the application as follows.
 
 ``` .kv
 ScreenManager:
@@ -429,7 +427,7 @@ gui.run()
 With this, I can view the Login screen - useful when creating the UI as it helps to visualize the KivyMD code.
 
 1. Create the ```try_login(self)``` method for login that takes the input value from the two ```TextEditField```s: email and password.
-2. Include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; it's main purpose is to increase code readability - to stop the method if either input is empty.
+2. Include a ***guard clause*** - an if-statement that eliminates certain conditions that may cause error later on, protecting the system from crashing, bugs, and many more; its main purpose is to increase code readability - to stop the method if either input is empty.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -451,7 +449,7 @@ class LoginScreen(MDScreen):
 The next step is to make two boolean expressions: one to check whether the user exists and one to check if the input password is correct.
 
 1. The program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input.
-2. Include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database.
+2. Include a ***guard clause*** to exclude the possibility where the email doesn't exist in the database.
 3. Use ```check_password()``` to check if the input password correlates with the hashed password in the database of the user.
 
 ``` python
@@ -602,14 +600,14 @@ class RegisterScreen(MDScreen):
         
 ```
 
-Now, I have to add the ```new_user``` into the ```users``` table. However, if a value contradicts with the rows properties, the program will exit automatically. For example, if the input email already exist in the database, there will be a contradiction because when I defined the rows of the ```users``` table, ```email``` is a ***UNIQUE*** variable, which meant that there can only be one in that column.
+Now, I have to add the ```new_user``` into the ```users``` table. However, if a value contradicts with the row's properties, the program will exit automatically. For example, if the input email already exist in the database, there will be a contradiction because when I defined the rows of the ```users``` table, ```email``` is a ***UNIQUE*** variable, which means that there can only be one in that column.
 
-Therefore, the program must scan the database to see whether the email has already been used by a user before commiting to avoid program exit.
+Therefore, the program must scan the database to see whether the email has already been used by a user before committing to avoid program exit.
 
-1. Assign ```is_duplicate``` to the result after querying the database for email duplicates - return ```type: None``` means there is no duplicates, anything else means that the email already exist.
+1. Assign ```is_duplicate``` to the result after querying the database for email duplicates - return ```type: None``` means there are no duplicates, anything else means that the email already exists.
 2. Add a ***guard clause*** to stop the method if there is at least one duplicate.
 3. Use ```session.add()```, which places the object ```new_user``` into a placeholder - pending changes - that can later be added into the database.
-4. Use ```session.commit()``` to ***flush*** - commiting all pending changes - ```session.add(new_user)``` above, which will add it to the database.
+4. Use ```session.commit()``` to ***flush*** - committing all pending changes - ```session.add(new_user)``` above, which will add it to the database.
 5. Use ```session.close()``` to end the process.
 6. Log the user in and send them to the Home screen by changing the value of ```self.parent.current```.
 
@@ -646,7 +644,7 @@ class RegisterScreen(MDScreen):
 
 
 ### Software Update
-The software will recieve update as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the sofetware update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exeption of the database), and install the new version of the system.
+The software will receive updates as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the software update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exception of the database), and install the new version of the system.
 
 
 ## Criteria D: Functionality

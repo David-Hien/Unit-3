@@ -41,10 +41,6 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 5. Function to search specific information from a defined range
 6. Uses OOP (Object-oriented programming)
 
-### Evidence
-
-https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-97ad-bdec87c4fe62.mov  
-
 
 ## Criteria B: Solution Overview
 
@@ -68,6 +64,22 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 ***Figure 2:*** System Diagram. Shows the input, output, and the process in between.
 
 ### Flow Diagrams
+
+![LoginScreen](https://user-images.githubusercontent.com/89367058/164500231-e19a5401-af76-44d5-8144-f73e84136dd6.png)
+
+***Figure 3:*** Flow diagram of the ```LoginScreen``` class
+
+### <br/>
+
+![RegisterScreen](https://user-images.githubusercontent.com/89367058/164502452-e3fbbdc1-6bce-4718-9ce9-7ef3c6813cda.png)
+
+***Figure 4:*** Flow diagram of the ```RegisterScreen``` class
+
+### <br/>
+
+![edit_save](https://user-images.githubusercontent.com/89367058/164504865-775aec6d-9cd2-4973-8b94-45145eeb5301.png)
+
+***Figure 4:*** Flow diagram of the ```edit_save``` method in the ```TableScreen``` class
 
 ### UML Diagram
 
@@ -1044,7 +1056,7 @@ Requires:
 
 Add a new data row - refer ```register()``` method in ```RegisterScreen``` class.
 
-***Important note***: a ```user_id``` is included as a ```ForeignKey``` to link to the ```users``` table.
+***Important note:*** a ```user_id``` is included as a ```ForeignKey``` to link to the ```users``` table.
 
 ``` python
 class TableScreen(MDScreen):
@@ -1114,12 +1126,23 @@ class TableScreen(MDScreen):
         
 ```
 
-### Screenshot of UI
+### UI Screenshots
 
-<img width="912" alt="Screen Shot 2022-04-22 at 0 06 47" src="https://user-images.githubusercontent.com/89367058/164488615-43e85080-a0c8-4e4c-ba4e-c565e40d19c8.png"><img width="912" alt="Screen Shot 2022-04-22 at 0 06 52" src="https://user-images.githubusercontent.com/89367058/164488648-52b81bb5-dd8b-4a48-adc7-2a7a9ce66393.png">
-<img width="912" alt="Screen Shot 2022-04-22 at 0 07 18" src="https://user-images.githubusercontent.com/89367058/164488660-e9369805-6032-4928-9a87-504e546b23b7.png">
-<img width="912" alt="Screen Shot 2022-04-22 at 0 07 33" src="https://user-images.githubusercontent.com/89367058/164488663-f3f20e34-ed7c-4a92-8a0e-34805109a324.png">
+<img width="800" alt="Screen Shot 2022-04-22 at 0 06 47" src="https://user-images.githubusercontent.com/89367058/164490407-658cd929-be77-4474-b854-1d8302aa8484.png">
 
+***Figure 8:*** Screenshot of the Login screen
+
+<img width="800" alt="Screen Shot 2022-04-22 at 0 06 52" src="https://user-images.githubusercontent.com/89367058/164490726-c4ae7354-6be7-4888-99af-1e23a9f0260b.png">
+
+***Figure 9:*** Screenshot of the Register screen
+
+<img width="800" alt="Screen Shot 2022-04-22 at 0 07 18" src="https://user-images.githubusercontent.com/89367058/164490899-c2647c1e-6f2c-4804-af36-00446a07ec49.png">
+
+***Figure 10:*** Screenshot of the Home screen
+
+<img width="800" alt="Screen Shot 2022-04-22 at 0 07 33" src="https://user-images.githubusercontent.com/89367058/164491065-e6417ecf-67b6-40e2-9ceb-e7b655220a95.png">
+
+***Figure 11:*** Screenshot of the Table screen
 
 ### Software Update
 The software will receive updates as per user's requests. Since the number of user is still small, updating based on the user's feedbacks allows for a more transparent process and guarantees that the user is satisfied with the changes. Also, the software update will be a direct changeover - changing to the new system immediately. The advantage to this is that it's the quickest and most efficient method. However, the drawback is that if the system were to fail, it would fail completely, but because the system is simple and relatively small, the disadvantage is insignificant. Lastly, the update will be sent via mail and completely optional, as some user may prefer using the previous versions. To proceed with the direct-changeover update, opening the update package will automatically delete the previous version (with the exception of the database), and install the new version of the system.
@@ -1129,6 +1152,10 @@ The software will receive updates as per user's requests. Since the number of us
 
 
 ## Apendix
+
+### Client's statement
+
+https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-97ad-bdec87c4fe62.mov
 
 
 ## Citation

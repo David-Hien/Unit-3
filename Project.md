@@ -204,7 +204,7 @@ class Shoes(Base):
 
 ```
 
-Lastly, I have to import this file into the ```main.py``` file where the app will be running from. In addition, create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assigning the database handler as ```session```.
+Lastly, I have to import the classes into the ```main.py``` file where the app will be running from. In addition, create the database with SQLAlchemy using ```create_engine()```, ORM with ```sessionmaker()```, and finally assigning the database handler as ```session```.
 
 ``` python
 # Import from SQLAlchemy the function to connect to db
@@ -223,9 +223,47 @@ session = db_session()
 
 ```
 
+***Password hashing***
+
+Password hashing is a method to secure a password by converting it into an encrypted representation of itself. The hashed password will then be stored into the database. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. For this application, I'll be using the PBKDF2-SHA256 hash, which is one of the most common hashes that focuses on countering brute-force attacks<sup>[[5]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup> - requires a lot of computational power to crack. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
+
+I allocated a different python file ```password_hash.py``` for this task. To begin hasing passwords in python, I need to download the passlib library. In the terminal of the IDE (PyCharm in my case), run the command ```pip install passlib```, and import it into the python file. Use CryptContext to set the parameters (```schemes```, ```default```, ```pbkdf2_sha256__default_rounds```) for the hash function.
+
+``` python
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    default="pbkdf2_sha256",
+    pbkdf2_sha256__default_rounds=65893
+)
+
+```
+
+Then, create two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input and the hashed password.
+
+``` python
+def encrypt_password(password):
+    return pwd_context.encrypt(password)
+
+
+def check_password(password, hashed):
+    return pwd_context.verify(password, hashed)
+    
+```
+
+Lastly, import these functions into ```main.py```.
+
+``` python
+# Import function for hashing password
+from password_hash import encrypt_password, check_password
+
+```
+
 ***Instal and import KivyMD***
 
-Before I can start programming, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to imported from KivyMD as follow.
+Before I can start programming the Login screen, I need to install the KivyMD library via the terminal, using the command line ```pip install kivymd```, which will automatically begin the installation process. After that, I will be able to import the library into my python file and use it. For the application, I needed to imported from KivyMD as follow.
 
 ``` python
 # Import kivymd for GUI design
@@ -406,7 +444,7 @@ class LoginScreen(MDScreen):
 
 ```
 
-The next step is to make two boolean expressions to check two conditions: whether the user exists and whether the password is correct. First, the program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input. In addition, include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database.
+The next step is to make two boolean expressions: one to check whether the user exists and one to check if the input password is correct. Firstly, the program has to query the database's ***users*** table for the user with the same ***email*** as the one in the input. Secondly, include a ***guard clause*** to exclude the posibility where the email doesn't exist in the database. Finally, use ```check_password()``` to check if the input password correlates with the hashed password in the database of the user.
 
 ``` python
 class LoginScreen(MDScreen):
@@ -425,6 +463,10 @@ class LoginScreen(MDScreen):
         if not current_user:
             print("User doesn't exist")
             return
+
+        # Check if the password stored in the database is the same as the one inputed
+        if check_password(pass_entered, current_user.password):
+            self.parent.current = "HomeScreen"
                         
 ```
 
@@ -449,4 +491,5 @@ The software will recieve update as per user's requests. Since the number of use
 2. Carbonnelle, P. (n.d.). PYPL popularity of Programming Language index. index. Retrieved March 22, 2022, from https://pypl.github.io/PYPL.html 
 3. Rodríguez, A. (2021). Welcome to KIVYMD's documentation!. Welcome to KivyMD's documentation! - KivyMD 1.0.0.dev0 documentation. Retrieved March 26, 2022, from https://kivymd.readthedocs.io/en/latest/ 
 4. Gantan, X. (2014, March 12). Overview of SQLALCHEMY's expression language and Orm queries. Python Central. Retrieved March 27, 2022, from https://www.pythoncentral.io/overview-sqlalchemys-expression-language-orm-queries/ 
-5. Datatables. DataTables - KivyMD 1.0.0.dev0 documentation. (n.d.). Retrieved April 19, 2022, from https://kivymd.readthedocs.io/en/latest/components/datatables/ 
+5. Wikimedia Foundation. (2022, April 3). PBKDF2. Wikipedia. Retrieved April 21, 2022, from https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation 
+6. Datatables. DataTables - KivyMD 1.0.0.dev0 documentation. (n.d.). Retrieved April 19, 2022, from https://kivymd.readthedocs.io/en/latest/components/datatables/ 

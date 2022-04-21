@@ -112,7 +112,7 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 ***Figure 9:*** ER table 2. Shoes table with some examples.
 
 
-### Development Plan
+### Record of Task
 | task no. | task                                        | planned outcome                                                                      | est. time | est. completion date | criteria |
 |----------|---------------------------------------------|--------------------------------------------------------------------------------------|-----------|----------------------|----------|
 | 1        | Planning: meet with client                  | identified problem, success criteria, meeting schedule, etc.                         | 20min     | March 2              | A        |

@@ -83,9 +83,9 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 
 ### UML Diagram
 
-![Untitled Diagram drawio](https://user-images.githubusercontent.com/89367058/161373661-df4e5e95-5beb-4503-a19b-4fa82f9b2499.png)
+![UML_diagram](https://user-images.githubusercontent.com/89367058/165523874-4164c1f5-a23e-4410-b4d9-4e8e0e76535f.png)
 
-***Figure 6:*** UML diagram for the database. Shows the attributes of each class/tables and the relation of the two: ***one*** user can have ***n*** Shoes.
+***Figure 6:*** UML diagram representing the classes in ```main.py```. Shows the methods of each class and the inheritance from KivyMD library.
 
 ### ER Diagram
 

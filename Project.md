@@ -14,7 +14,7 @@
 
 ### Definition of Problem
 
-My client has a collection of shoes. At the moment, they do not use any application or system to organize their collection. For that reason, my client wishes for an application that can store the data of their shoes and is able to organize it based on different factors to help them keep a better track of the collection.
+My client has a collection of shoes. At the moment, they are  they do not use any application or system to organize their collection. For that reason, my client wishes for an application that can store the data of their shoes and is able to organize it based on different factors to help them keep a better track of the collection.
 
 ### Proposed Solution
 

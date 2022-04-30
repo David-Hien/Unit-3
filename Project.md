@@ -37,7 +37,7 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 1. User is able to Add and Remove data in the table
 2. User is able to Edit existing data
 3. The application has a login and register page
-4. The login information and database is secured and the password is hashed
+4. The login information and database are secured and the password is hashed
 5. Function to sort the table based on different factors
 6. Follow good coding practises, which allow for future extensions by other developers
 

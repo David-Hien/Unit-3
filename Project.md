@@ -434,7 +434,289 @@ class RegisterScreen(MDScreen):
 ```
 
 
+### Table screen
 
+This is the most important screen in the application, it’s going to ***display*** the shoe collection and host the main functions. According to the success criteria, the functions ***edit***, ***add***, and ***remove*** will be included in this screen. In addition, the client requested that there is a function to ***sort*** the ***table*** based on any ***column***.
+
+#### Code repetition
+
+Throughout the development of the Table screen, I noticed a major problem: code repetition. I recognized a pattern from my code, some of the methods’ commands are the same (or similar). For example, getting the current user (```type: class 'database_models.users'```), getting data from the ```Shoes``` table, etc. For that reason, I created separate methods for each of them to minimize repetition and at the same time, increase code readability.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    # Call table
+    data_tables = None
+
+    # This method queries the users table and return the current user
+    def current_user(self):
+        current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
+
+        # Query the user
+        current_user = (session.query(users).
+                        filter(users.email == current_user_email).
+                        first())
+
+        return current_user
+
+    # This method queries the Shoes table and return its data as a list
+    def get_shoes(self):
+        # Query the Shoes table for rows with matching Foreign key to the user
+        query = session.query(Shoes).filter(Shoes.user_id == self.current_user().id)
+        session.close()
+
+        # Append the results into a list then return it
+        result = []
+        for q in query:
+            result.append([q.id, q.brand, q.model, q.size, q.material, q.color, q.price])
+
+        return result
+
+    def on_pre_enter(self, *args):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Creates the table
+        self.data_tables = MDDataTable(
+            size_hint=(.9, .5),
+            pos_hint={"center_x": .5, "center_y": .5},
+            check=True,
+            column_data=[
+                ("id", dp(20), self.sort_id),
+                ("brand", dp(35), self.sort_brand),
+                ("model", dp(35), self.sort_model),
+                ("size", dp(20), self.sort_size),
+                ("material", dp(30), self.sort_material),
+                ("color", dp(20), self.sort_color),
+                ("price", dp(20), self.sort_price)
+            ],
+            row_data=result,
+        )
+        self.data_tables.bind(on_check_press=self.check_pressed)
+        self.add_widget(self.data_tables)
+        
+    # This method takes the value on the selected row of the table
+    # and prints it on the according TextEdit fields
+    def check_pressed(self, table, row):
+        # Assign variables to store the values of the selected row
+        shoe_id, brand, model, size, material, color, price = row
+
+        # Print the values on the TextEdit fields
+        self.ids.shoe_id.text = shoe_id
+        self.ids.brand.text = brand
+        self.ids.model.text = model
+        self.ids.size.text = size
+        self.ids.material.text = material
+        self.ids.color.text = color
+        self.ids.price.text = price
+
+    # This method takes the input from the values in the TextEdit fields
+    # and converted it into a row
+    def get_row(self):
+        # Assign variables to store the values of each TextEdit fields
+        brand = self.ids.brand.text
+        model = self.ids.model.text
+        size = self.ids.size.text
+        material = self.ids.material.text
+        color = self.ids.color.text
+        price = self.ids.price.text
+
+        if (
+                not brand or
+                not model or
+                not size or
+                not material or
+                not color or
+                not price):
+            print("Input missing")
+            return
+
+        # Format the values correctly for update
+        row = (brand, model, size, material, color, price)
+        return row
+        
+    # This method updates the table on display
+    def update_table(self):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Updates the table
+        self.data_tables.update_row_data(
+            None, result
+        )
+
+    # This method clears the inputs
+    def clear(self):
+        # Clear all TextEdit fields
+        self.ids.shoe_id.text = ""
+        self.ids.brand.text = ""
+        self.ids.model.text = ""
+        self.ids.size.text = ""
+        self.ids.material.text = ""
+        self.ids.color.text = ""
+        self.ids.price.text = ""
+        
+```
+
+#### Edit, Add, and Remove methods
+
+Although the process is highly technical, I didn’t face any worth-mentioning problems.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+
+    # This method takes the value on the selected row of the table
+    # and prints it on the according TextEdit fields
+    def check_pressed(self, table, row):
+        ...
+
+    # This method takes the input from the values in the TextEdit fields
+    # and converted it into a row
+    def get_row(self):
+        ...
+
+    # This method runs when the button "Save" is pressed
+    def edit_save(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        # Row data
+        updated_row = self.get_row()
+        if not updated_row:
+            return
+
+        brand, model, size, material, color, price = updated_row
+
+        # Update the Shoes table with the new data
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            update({Shoes.brand: brand,
+                    Shoes.model: model,
+                    Shoes.size: size,
+                    Shoes.material: material,
+                    Shoes.color: color,
+                    Shoes.price: price})
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    # This method adds a new data row
+    def add_item(self):
+        # Row data
+        new_row = self.get_row()
+        if not new_row:
+            return
+
+        brand, model, size, material, color, price = new_row
+
+        # Update the Shoes table with the new data
+        new_shoe = Shoes(brand=brand,
+                         model=model,
+                         size=size,
+                         material=material,
+                         color=color,
+                         price=price,
+                         user_id=self.current_user().id)
+
+        session.add(new_shoe)
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    # This method removes the data row
+    def remove_item(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            delete()
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    ...
+        
+```
+
+#### Sort method
+
+As my client specifically requested the ***sorting function***, my immediate ideas were to ***sort*** the ***table*** within the database or to sort the ***displayed table***. However, after some research, attempts, and comparisons, I realized several things:
+- **Speed**:
+    - The ***former*** takes ***more*** time as it requires two steps, ***ordering*** the ***table*** and ***updating*** the ***table***.
+    - The ***latter*** takes ***less*** time as it only ***sorts*** the ***table***.
+- **Feasibility**:
+    - The ***former*** is ***less*** feasible as it requires a significant amount of commands and is extremely complicated.
+    - The ***latter*** is ***more*** feasible as an example already exists on an online source – in the DataTables section<sup>[[7]](https://kivymd.readthedocs.io/en/latest/components/datatables/)</sup>.
+
+As a result, I opted for the second solution, ***sorting*** the ***displayed table***.
+
+``` python
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    
+    ...
+    
+    # These methods are toggles used for sorting the table
+    def get_sort(self, data, column_number):
+        return zip(
+            *sorted(
+                enumerate(data),
+                key=lambda l: l[1][column_number]
+            )
+        )
+
+    # Sort based on id number
+    def sort_id(self, data):
+        return self.get_sort(data, 0)
+
+    # Sort based on brand name
+    def sort_brand(self, data):
+        return self.get_sort(data, 1)
+
+    # Sort based on model
+    def sort_model(self, data):
+        return self.get_sort(data, 2)
+
+    # Sort based on size
+    def sort_size(self, data):
+        return self.get_sort(data, 3)
+
+    # Sort based on material
+    def sort_material(self, data):
+        return self.get_sort(data, 4)
+
+    # Sort based on color
+    def sort_color(self, data):
+        return self.get_sort(data, 5)
+
+    # Sort based on price
+    def sort_price(self, data):
+        return self.get_sort(data, 6)
+
+    ...
+        
+```
 
 
 ### UI Screenshots

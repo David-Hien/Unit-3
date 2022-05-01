@@ -193,6 +193,83 @@ As apparent as the benefits, the downside is considerable:
 
 **Verdict**: It is a viable option to use the table per tenant method. However, the benefits it brings are not appealing enough to justify the downsides. Therefore, I opted for another solution, only having two tables – sacrificing an unnoticeable amount of run time for a much better code extendability and update potential.
 
+#### Foreign key
+
+So, how can I know ***whose shoe it is*** with only two ***tables***? The answer is simple – ***check the foreign key***. A ***foreign key*** acts as a bridge between ***tables***. It holds the address of the object in another ***table***. In this case, the shoe ***table*** has an extra ***column*** ```foreign_key```, which will hold the address of the user it belongs to.
+
+#### Creating the database.
+
+``` python
+# Import database_models
+from sqlalchemy import Column, Integer, String, create_engine, ForeignKey
+from sqlalchemy.orm import declarative_base
+
+# Call Base
+Base = declarative_base()
+
+
+class users(Base):
+    """ This class represents the users table"""
+
+    # Create new table for users
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255))
+    email = Column(String(255), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+
+
+class Shoes(Base):
+    """ This class represents the Shoes table"""
+
+    # Create new table for Shoes
+    __tablename__ = "Shoes"
+    id = Column(Integer, primary_key=True)
+    brand = Column(String(255))
+    model = Column(String(255))
+    size = Column(String(255))
+    material = Column(String(255))
+    color = Column(String(255))
+    price = Column(String(255))
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+
+# Creates the database
+db_engine = create_engine("sqlite:///orm_database.db")
+Base.metadata.create_all(db_engine)
+
+```
+
+### Password hashing
+
+My client values privacy stated in success criteria 4 – the login information and database are secured and the password is hashed. To tackle this problem, I enlisted the help from ```passlib``` library – a hashing library for Python – and specifically, the class ```CryptContext```.
+
+Hashing is encrypting a value to secure it. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. I used the PBKDF2-SHA256 hash, which is one of the most powerful hashes that focuses on countering brute-force attacks<sup>[[6]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup>. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
+
+In addition, I created two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input in comparison to the hashed password.
+
+``` python
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    default="pbkdf2_sha256",
+    pbkdf2_sha256__default_rounds=65893
+)
+
+
+def encrypt_password(password):
+    return pwd_context.encrypt(password)
+
+
+def check_password(password, hashed):
+    return pwd_context.verify(password, hashed)
+
+```
+
+
+
 ### UI Screenshots
 
 <img width="800" alt="Screen Shot 2022-04-22 at 0 06 47" src="https://user-images.githubusercontent.com/89367058/164490407-658cd929-be77-4474-b854-1d8302aa8484.png">

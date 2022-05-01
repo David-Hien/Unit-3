@@ -181,7 +181,7 @@ The next step was to make the ***tables***, which will hold all the users’ and
 The first thing that came to my mind was to create a ***table*** for each user instead of having one big ***table*** for everyone – which meant we can determine whose shoe it is just by the ***table*** name. The benefits are:
 - **Faster query**:
     - The time complexity is the same in both cases – O(n), linear time – because both will have to ***query*** the entire table once.
-    - With that being said, the ***table*** per ***tenant (user)*** method<sup>[6](https://www.eclipse.org/eclipselink/documentation/2.4/solutions/multitenancy003.htm)</sup> provides a slightly faster ***query*** because of the smaller ***table*** size.
+    - With that being said, the ***table*** per ***tenant (user)*** method<sup>[[5]](https://www.eclipse.org/eclipselink/documentation/2.4/solutions/multitenancy003.htm)</sup> provides a slightly faster ***query*** because of the smaller ***table*** size.
 - **Customizable**:
     - Given the access to the source code, any user can customize the ***columns***, ***data types***, ***etc.***
     - However, this is only possible with offline databases, which applies in this case, but in the grand scheme of things, it’s best to not allow direct access to the source code for privacy’s sake.

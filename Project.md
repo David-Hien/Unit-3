@@ -168,6 +168,7 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 
 The UI (user interface) plays an important role in app development as it provides visuals and the experience. However, this process does not highlight my computational skills and for that reason, I decided not to include this in criteria C. Please refer to the [Apendix](https://github.com/David-Hien/Unit-3/blob/main/Project.md#apendix) for the source code.
 
+
 ### Creating the database
 
 One of the most important components of the application is the database because most of the contents are built from the data stored inside of it. The two beings: the users and the shoes. I used SQLAlchemy and ORM (object-relational mapping) to serve several functions based on the success criteria, which are: ***create***, ***edit***, ***add***, and ***remove***.
@@ -240,6 +241,7 @@ Base.metadata.create_all(db_engine)
 
 ```
 
+
 ### Password hashing
 
 My client values privacy stated in success criteria 4 – the login information and database are secured and the password is hashed. To tackle this problem, I enlisted the help from ```passlib``` library – a hashing library for Python – and specifically, the class ```CryptContext```.
@@ -267,6 +269,171 @@ def check_password(password, hashed):
     return pwd_context.verify(password, hashed)
 
 ```
+
+
+### Login screen
+
+As per the client’s request, the app will include a login/register function.
+
+The problem I encountered when making the Login screen was checking if the login information was correct – corresponding to an existing user inside the database. My approach is to split it into 3 steps: ***getting the input***, ***querying the*** ```users``` ***database for users with the same*** ```email``` ***and*** ```password``` ***as the input***, and ***switching to the Home screen***.
+
+#### 1. Getting the input
+
+I assigned the input value from the two TextEditFields (```email``` and ```password```) to two local variables for convenience and code readability.
+
+However, there is an issue – ***what if the input is blank***. ***Querying*** nothing will yield no value, also, the ```password_check()``` function does not take ```NoneType``` as an input – the program will exit with an ```AttributeError```. To prevent this issue and possible crash, I included a ***guard clause*** – an if-statement that eliminates conditions that may cause an error, protecting the system from crashing, bugs, and many more; its main purpose is to increase code readability. The ***guard clause*** will check if either the inputs are empty:
+If yes, ```return``` – cancel the action of pressing the Login button, which does nothing.
+If not, continue to the next step.
+
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        # Store the values inputed
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+
+        # Stops the method if either inputs is empty
+        if not email_entered or not pass_entered:
+            print("Input required")
+            return
+            
+```
+
+#### 2. Querying the ```users``` table
+
+I assigned a ***boolean*** expression to check whether the ***email*** and ***password*** match the database.
+
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        # Store the values inputed
+        ...
+
+        # Stops the method if either inputs is empty
+        ...
+
+        # Scan the database for the account with the same email
+        current_user = (session.query(users).
+                        filter(users.email == email_entered, check_password(pass_entered, current_user.password)).
+                        first())
+                        
+```
+
+However, I encountered another problem here, because of a property of the ```check_password()``` function, in most cases, it returns false even though the ***password*** typed is correct. This property is a security measure to protect the hashed strings in the case of the key being discovered, which meant using the same key on other hashed items will yield no result.
+
+To counter this issue, I first search for the user with the same ***email*** – which is ***unique*** – and then check whether the input matches the corresponding ***password***. If the input is correct, log the user in.
+
+``` python
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        # Store the values inputed
+        ...
+
+        # Stops the method if either inputs is empty
+        ...
+
+        # Scan the database for the account with the same email
+        current_user = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+
+        # Stops the method if the user doesn't exist
+        if not current_user:
+            print("User doesn't exist")
+            return
+
+        # Check if the password stored in the database is the same as the one inputed
+        if check_password(pass_entered, current_user.password):
+            self.parent.current = "HomeScreen"
+            
+```
+
+
+### Register screen
+
+Similar to the Login screen, the Register screen also takes the input from the user. The same problem of ***empty inputs*** arises, to which I used the same method: ***guard clause***.
+
+Then, the program can add the ***new user*** to the ***table*** with the hashed ***password***.
+
+``` python
+class RegisterScreen(MDScreen):
+    """ This class creates the register screen"""
+
+    # This method creates a new user account and add it to the database
+    def register(self):
+        # Store the values inputed
+        username_entered = self.ids.username_input.text
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+
+        # Stops method if input left blank
+        if not username_entered or not email_entered or not pass_entered:
+            print("Input required")
+            return
+
+        # Hash the password (for security)
+        pass_hashed = encrypt_password(pass_entered)
+
+        # Update the database with the new account
+        new_user = users(username=username_entered,
+                         email=email_entered,
+                         password=pass_hashed)
+
+        # Add new_user to the table
+        session.add(new_user)
+        session.commit()
+        session.close()
+        self.parent.current = "LoginScreen"
+        
+```
+
+However, when I tested with an ***existing email***, the program exits. This is because I set the ```email``` ***column*** in the ```users``` ***table*** to be ***unique*** and if the same value is added, the program crashes. This problem was solved by ***querying*** the ***table*** for the ***email***. If the result is:
+```type: class 'database_models.users'```, stop the method.
+```NoneType```, continue and add the new user.
+
+``` python
+class RegisterScreen(MDScreen):
+    """ This class creates the register screen"""
+
+    # This method creates a new user account and add it to the database
+    def register(self):
+        # Store the values inputed
+        ...
+
+        # Stops method if input left blank
+        ...
+
+        # Hash the password (for security)
+        ...
+
+        # Update the database with the new account
+        ...
+
+        # Scan the database for the account with the same email
+        is_duplicate = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+
+        # Stops method if email already linked to a user
+        if is_duplicate:
+            print("Email already linked to an account.")
+            return
+
+        # Add new_user to the table
+        ...
+        
+```
+
+
 
 
 

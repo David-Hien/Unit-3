@@ -568,16 +568,6 @@ class TableScreen(MDScreen):
     
     ...
 
-    # This method takes the value on the selected row of the table
-    # and prints it on the according TextEdit fields
-    def check_pressed(self, table, row):
-        ...
-
-    # This method takes the input from the values in the TextEdit fields
-    # and converted it into a row
-    def get_row(self):
-        ...
-
     # This method runs when the button "Save" is pressed
     def edit_save(self):
         # Checks if Shoe id is specified, doesn't run if shoe_id blank
@@ -755,6 +745,742 @@ https://user-images.githubusercontent.com/89367058/160220880-46e9df1f-ca53-4b7a-
 
 <img width="636" alt="Screen Shot 2022-04-28 at 16 24 57" src="https://user-images.githubusercontent.com/89367058/165754037-88a00332-9c5a-48c4-91f6-eb712472b00a.png">
 
+### Source code
+
+#### database_models.py
+
+``` python
+# Import database_models
+from sqlalchemy import Column, Integer, String, create_engine, ForeignKey
+from sqlalchemy.orm import declarative_base
+
+# Call Base
+Base = declarative_base()
+
+
+class users(Base):
+    """ This class represents the users table"""
+
+    # Create new table for users
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255))
+    email = Column(String(255), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+
+
+class Shoes(Base):
+    """ This class represents the Shoes table"""
+
+    # Create new table for Shoes
+    __tablename__ = "Shoes"
+    id = Column(Integer, primary_key=True)
+    brand = Column(String(255))
+    model = Column(String(255))
+    size = Column(String(255))
+    material = Column(String(255))
+    color = Column(String(255))
+    price = Column(String(255))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    
+```
+
+#### passsword_hash.py
+
+``` python
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    default="pbkdf2_sha256",
+    pbkdf2_sha256__default_rounds=65893
+)
+
+
+def encrypt_password(password):
+    return pwd_context.encrypt(password)
+
+
+def check_password(password, hashed):
+    return pwd_context.verify(password, hashed)
+
+```
+
+#### main.py
+
+``` python
+# Import kivymd for GUI design
+from kivymd.app import MDApp
+from kivymd.material_resources import dp
+from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.screen import MDScreen
+
+# Import from SQLAlchemy the function to connect to db
+from sqlalchemy import create_engine
+
+# Function to create a session
+from sqlalchemy.orm import sessionmaker
+from database_models import Base, users, Shoes
+
+# Import function for hashing password
+from password_hash import encrypt_password, check_password
+
+# Creates the database
+db_engine = create_engine("sqlite:///orm_database.db")
+Base.metadata.create_all(db_engine)
+Base.metadata.bind = db_engine
+db_session = sessionmaker(bind=db_engine)
+session = db_session()
+
+
+class LoginScreen(MDScreen):
+    """ This class creates the login screen"""
+
+    # This method takes the login information then cross check it with the database log the user in
+    def try_login(self):
+        # Store the values inputed
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+
+        # Stops the method if either inputs is empty
+        if not email_entered or not pass_entered:
+            print("Input required")
+            return
+
+        # Scan the database for the account with the same email
+        current_user = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+
+        # Stops the method if the user doesn't exist
+        if not current_user:
+            print("User doesn't exist")
+            return
+
+        # Check if the password stored in the database is the same as the one inputed
+        if check_password(pass_entered, current_user.password):
+            self.parent.current = "HomeScreen"
+
+
+class RegisterScreen(MDScreen):
+    """ This class creates the register screen"""
+
+    # This method creates a new user account and add it to the database
+    def register(self):
+        # Store the values inputed
+        username_entered = self.ids.username_input.text
+        email_entered = self.ids.email_input.text
+        pass_entered = self.ids.password_input.text
+
+        # Stops method if input left blank
+        if not username_entered or not email_entered or not pass_entered:
+            print("Input required")
+            return
+
+        # Hash the password (for security)
+        pass_hashed = encrypt_password(pass_entered)
+
+        # Update the database with the new account
+        new_user = users(username=username_entered,
+                         email=email_entered,
+                         password=pass_hashed)
+
+        # Scan the database for the account with the same email
+        is_duplicate = (session.query(users).
+                        filter(users.email == email_entered).
+                        first())
+
+        # Stops method if email already linked to a user
+        if is_duplicate:
+            print("Email already linked to an account.")
+            return
+
+        # Add new_user to the table
+        session.add(new_user)
+        session.commit()
+        session.close()
+        self.parent.current = "LoginScreen"
+
+
+class HomeScreen(MDScreen):
+    """ This class creates the home screen"""
+
+    # This method runs when loading the window
+    def on_pre_enter(self, *args):
+        # Store the current logged in user's email
+        current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
+
+        # Query the user
+        current_user = (session.query(users).
+                        filter(users.email == current_user_email).
+                        first())
+
+        # Welcome message
+        self.ids.name_label.text = f"Welcome, {current_user.username}"
+
+
+class TableScreen(MDScreen):
+    """ This class creates the table screen"""
+    # Call table
+    data_tables = None
+
+    # This method queries the users table and return the current user
+    def current_user(self):
+        current_user_email = self.parent.ids.LoginScreen.ids.email_input.text
+
+        # Query the user
+        current_user = (session.query(users).
+                        filter(users.email == current_user_email).
+                        first())
+
+        return current_user
+
+    # This method queries the Shoes table and return its data as a list
+    def get_shoes(self):
+        # Query the Shoes table for rows with matching Foreign key to the user
+        query = session.query(Shoes).filter(Shoes.user_id == self.current_user().id)
+        session.close()
+
+        # Append the results into a list then return it
+        result = []
+        for q in query:
+            result.append([q.id, q.brand, q.model, q.size, q.material, q.color, q.price])
+
+        return result
+
+    def on_pre_enter(self, *args):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Creates the table
+        self.data_tables = MDDataTable(
+            size_hint=(.9, .5),
+            pos_hint={"center_x": .5, "center_y": .5},
+            check=True,
+            column_data=[
+                ("id", dp(20), self.sort_id),
+                ("brand", dp(35), self.sort_brand),
+                ("model", dp(35), self.sort_model),
+                ("size", dp(20), self.sort_size),
+                ("material", dp(30), self.sort_material),
+                ("color", dp(20), self.sort_color),
+                ("price", dp(20), self.sort_price)
+            ],
+            row_data=result,
+        )
+        self.data_tables.bind(on_check_press=self.check_pressed)
+        self.add_widget(self.data_tables)
+
+    # These methods are toggles used for sorting the table
+    def get_sort(self, data, column_number):
+        return zip(
+            *sorted(
+                enumerate(data),
+                key=lambda l: l[1][column_number]
+            )
+        )
+
+    # Sort based on id number
+    def sort_id(self, data):
+        return self.get_sort(data, 0)
+
+    # Sort based on brand name
+    def sort_brand(self, data):
+        return self.get_sort(data, 1)
+
+    # Sort based on model
+    def sort_model(self, data):
+        return self.get_sort(data, 2)
+
+    # Sort based on size
+    def sort_size(self, data):
+        return self.get_sort(data, 3)
+
+    # Sort based on material
+    def sort_material(self, data):
+        return self.get_sort(data, 4)
+
+    # Sort based on color
+    def sort_color(self, data):
+        return self.get_sort(data, 5)
+
+    # Sort based on price
+    def sort_price(self, data):
+        return self.get_sort(data, 6)
+
+    # This method takes the value on the selected row of the table
+    # and prints it on the according TextEdit fields
+    def check_pressed(self, table, row):
+        # Assign variables to store the values of the selected row
+        shoe_id, brand, model, size, material, color, price = row
+
+        # Print the values on the TextEdit fields
+        self.ids.shoe_id.text = shoe_id
+        self.ids.brand.text = brand
+        self.ids.model.text = model
+        self.ids.size.text = size
+        self.ids.material.text = material
+        self.ids.color.text = color
+        self.ids.price.text = price
+
+    # This method takes the input from the values in the TextEdit fields
+    # and converted it into a row
+    def get_row(self):
+        # Assign variables to store the values of each TextEdit fields
+        brand = self.ids.brand.text
+        model = self.ids.model.text
+        size = self.ids.size.text
+        material = self.ids.material.text
+        color = self.ids.color.text
+        price = self.ids.price.text
+
+        if (
+                not brand or
+                not model or
+                not size or
+                not material or
+                not color or
+                not price):
+            print("Input missing")
+            return
+
+        # Format the values correctly for update
+        row = (brand, model, size, material, color, price)
+        return row
+
+    # This method runs when the button "Save" is pressed
+    def edit_save(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        # Row data
+        updated_row = self.get_row()
+        if not updated_row:
+            return
+
+        brand, model, size, material, color, price = updated_row
+
+        # Update the Shoes table with the new data
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            update({Shoes.brand: brand,
+                    Shoes.model: model,
+                    Shoes.size: size,
+                    Shoes.material: material,
+                    Shoes.color: color,
+                    Shoes.price: price})
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    # This method adds a new data row
+    def add_item(self):
+        # Row data
+        new_row = self.get_row()
+        if not new_row:
+            return
+
+        brand, model, size, material, color, price = new_row
+
+        # Update the Shoes table with the new data
+        new_shoe = Shoes(brand=brand,
+                         model=model,
+                         size=size,
+                         material=material,
+                         color=color,
+                         price=price,
+                         user_id=self.current_user().id)
+
+        session.add(new_shoe)
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    # This method removes the data row
+    def remove_item(self):
+        # Checks if Shoe id is specified, doesn't run if shoe_id blank
+        shoe_id = self.ids.shoe_id.text
+        if not shoe_id:
+            print("Shoe id missing")
+            return
+
+        session.query(Shoes). \
+            filter(Shoes.id == shoe_id). \
+            delete()
+
+        session.commit()
+        session.close()
+
+        # Refresh the table and TextEdit fields
+        self.update_table()
+        self.clear()
+
+    # This method updates the table on display
+    def update_table(self):
+        # List of shoes (and attributes)
+        result = self.get_shoes()
+
+        # Updates the table
+        self.data_tables.update_row_data(
+            None, result
+        )
+
+    # This method clears the inputs
+    def clear(self):
+        # Clear all TextEdit fields
+        self.ids.shoe_id.text = ""
+        self.ids.brand.text = ""
+        self.ids.model.text = ""
+        self.ids.size.text = ""
+        self.ids.material.text = ""
+        self.ids.color.text = ""
+        self.ids.price.text = ""
+
+
+class app_GUI(MDApp):
+    """ This class creates the GUI for the app"""
+
+    def build(self):
+        return
+
+
+gui = app_GUI()
+gui.run()
+
+```
+
+#### app_GUI.kv
+
+``` .kv
+ScreenManager:
+    id: scr_manager
+
+    LoginScreen:
+        name: "LoginScreen"
+        id: LoginScreen
+
+    RegisterScreen:
+        name: "RegisterScreen"
+        id: RegisterScreen
+
+    HomeScreen:
+        name: "HomeScreen"
+        id: HomeScreen
+
+    TableScreen:
+        name: "TableScreen"
+        id: TableScreen
+
+# Define the login screen
+<LoginScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+
+        FitImage:
+            source: 'shoez_login_background.jpg'
+            opacity: .85
+
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: None, None
+        size: "400dp", "500dp"
+        elevation: 10
+        # For colors: red, green, blue, alpha
+        md_bg_color: 229/255, 170/255, 140/255, 0.6
+        radius: 20, 20, 20, 20
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: .8, .8
+            pos_hint: {"center_x": .5, "center_y": .5}
+            spacing: dp(15)
+            padding: [dp(20), dp(60)]
+
+            MDLabel:
+                id: name_label
+                text: "Shoez"
+                halign: "center"
+                font_style: "H1"
+                color: 1, 1, 1, 1
+
+            MDTextField:
+                id: email_input
+                hint_text: "email"
+                color: 1, 1, 1, 1
+                helper_text: "Invalid email"
+                helper_text_mode: "on_error"
+                required: True
+                icon_right: "email"
+
+            MDTextField:
+                id: password_input
+                hint_text: "password"
+                color: 1, 1, 1, 1
+                helper_text: "Invalid password"
+                helper_text_mode: "on_error"
+                password: True
+                required: True
+                icon_right: "eye-off"
+
+            MDRaisedButton:
+                id: login_button
+                text: "Login"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                on_release:
+                    root.try_login()
+                    password_input.text=''
+
+            MDRaisedButton:
+                id: register_button
+                text: "Register"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                md_bg_color: 0, 0, 0, .3
+                on_release:
+                    root.parent.current='RegisterScreen'
+                    email_input.text=''
+                    password_input.text=''
+
+
+<RegisterScreen>
+    MDBoxLayout:
+        orientation: "vertical"
+
+        FitImage:
+            source: 'shoez_login_background.jpg'
+            opacity: .85
+
+    MDCard:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: None, None
+        size: "400dp", "500dp"
+        elevation: 10
+        # For colors: red, green, blue, alpha
+        md_bg_color: 229/255, 170/255, 140/255, 0.6
+        radius: 20, 20, 20, 20
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: .8, 1
+            pos_hint: {"center_x": .5, "center_y": .5}
+            spacing: dp(15)
+            padding: [dp(20), dp(40)]
+
+            MDLabel:
+                id: name_label
+                text: "Shoez"
+                halign: "center"
+                font_style: "H1"
+                color: 1, 1, 1, 1
+
+            MDTextField:
+                id: username_input
+                hint_text: "username"
+                color: 1, 1, 1, 1
+                helper_text: "Invalid username"
+                helper_text_mode: "on_error"
+                required: True
+                icon_right: "account"
+
+            MDTextField:
+                id: email_input
+                hint_text: "email"
+                color: 1, 1, 1, 1
+                helper_text: "Invalid email"
+                helper_text_mode: "on_error"
+                required: True
+                icon_right: "email"
+
+            MDTextField:
+                id: password_input
+                hint_text: "password"
+                color: 1, 1, 1, 1
+                helper_text: "Invalid password"
+                helper_text_mode: "on_error"
+                password: True
+                required: True
+                icon_right: "eye-off"
+
+            MDRaisedButton:
+                id: register_button
+                text: "Register"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                on_release:
+                    root.register()
+                    username_input.text=''
+                    email_input.text=''
+                    password_input.text=''
+
+            MDRaisedButton:
+                id: login_button
+                text: "Login"
+                pos_hint: {"center_x": .5}
+                size_hint: .6, None
+                padding_y: 20
+                md_bg_color: 0, 0, 0, .3
+                on_release:
+                    root.parent.current='LoginScreen'
+                    username_input.text=''
+                    email_input.text=''
+                    password_input.text=''
+
+
+<HomeScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: 1, .9
+        pos_hint: {"top": 1}
+
+        MDLabel:
+            id: name_label
+            halign: "center"
+            font_style: "H1"
+            color: 0, 0, 0, 1
+
+
+    MDRectangleFlatButton:
+        id: table_button
+        text: "Table"
+        text_color: 55/255, 173/255, 255/255, 1
+        size_hint: .4, None
+        pos_hint: {"center_x": .5, "center_y": .25}
+
+        on_release:
+            root.parent.current = "TableScreen"
+
+    MDRaisedButton:
+        id: logout_button
+        text: "Logout"
+        size_hint: .4, None
+        pos_hint: {"center_x": .5, "center_y": .16}
+        md_bg_color: .4, .4, .4, 1
+        on_release:
+            root.parent.current = "LoginScreen"
+
+
+<TableScreen>
+    MDRaisedButton:
+        id: back_to_home_button
+        text: "Back"
+        pos_hint: {"right": .15, "top": .95}
+        size_hint: None, None
+        md_bg_color: .4, .4, .4, 1
+        on_release:
+            root.parent.current = "HomeScreen"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5, "top": .3}
+        size_hint: .9, .3
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"top": 1}
+            size_hint: 1, .6
+
+            MDLabel:
+                text: "Edit"
+                font_size: 30
+                pos_hint: {"left": .05, "bottom": .2}
+                size_hint: .05, .5
+
+            MDTextField:
+                id: shoe_id
+                hint_text: "id"
+                pos_hint: {"left": .1, "bottom": .2}
+                size_hint: .03, .5
+
+            MDTextField:
+                id: brand
+                hint_text: "brand"
+                pos_hint: {"left": .2, "bottom": .2}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: model
+                hint_text: "model"
+                pos_hint: {"left": .35, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: size
+                hint_text: "size"
+                pos_hint: {"left": .5, "bottom": 0}
+                size_hint: .05, .5
+
+            MDTextField:
+                id: material
+                hint_text: "material"
+                pos_hint: {"left": .6, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: color
+                hint_text: "color"
+                pos_hint: {"left": .75, "bottom": 0}
+                size_hint: .1, .5
+
+            MDTextField:
+                id: price
+                hint_text: "price"
+                pos_hint: {"left": .9, "bottom": 0}
+                size_hint: .05, .5
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            pos_hint: {"bottom": 0}
+            size_hint: 1, .4
+
+            MDRaisedButton:
+                text: "Save"
+                size_hint: .1, .5
+                pos_hint : {"center_x": .2, "center_y": .7}
+                on_release:
+                    root.edit_save()
+
+            MDRaisedButton:
+                text: "Add"
+                md_bg_color: 0, .8, 0, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .4, "center_y": .7}
+                on_release:
+                    root.add_item()
+
+            MDRaisedButton:
+                text: "Clear"
+                md_bg_color: .4, .4, .4, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .6, "center_y": .7}
+                on_release:
+                    root.clear()
+
+            MDRaisedButton:
+                text: "Remove"
+                md_bg_color: 1, .1, .1, 1
+                size_hint: .1, .5
+                pos_hint : {"center_x": .8, "center_y": .7}
+                on_release:
+                    root.remove_item()
+
+```
 
 ## Citation
 1. Robinson, D. (2017, September 6). The incredible growth of python. Stack Overflow Blog. Retrieved March 22, 2022, from https://stackoverflow.blog/2017/09/06/incredible-growth-python/ 

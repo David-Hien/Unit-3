@@ -173,9 +173,9 @@ The UI (user interface) plays an important role in achieving the success criteri
 
 As the client requested, the app must include a storage system that stores data on the device. There are two tables to classify all the information: the users and the shoes. I used SQLAlchemy and ORM (object-relational mapping) because it provides an abstraction of database manipulation – the tables are represented by classes, instead of SQL commands.
 
-#### Making the tables
+#### How do we identify and differentiate between rows?
 
-The next step was to make the ***tables***, which will hold all the users’ and shoes’ data. Two important things to note about the ***tables*** are that they each need an ```id``` as a ***primary key*** and that it must be ***unique***. Thankfully, anytime a new user is registered or a new shoe is added, the ***primary key*** can be automatically generated and is ***unique***. Therefore, it is unnecessary to bother manually generating an ```id``` every time.
+Because the properties of the ***objects*** within a ***table*** can vary greatly, it’s difficult and inefficient to ***identify*** and ***differentiate*** ***objects*** in a ***table***. Therefore, the answer is to add the ```id``` ***column*** that any ***object*** can refer to as the ***primary key***. The ***primary key*** is unique – there can only be one per ***column***. This meant that the program can ***identify*** and ***differentiate*** between ***objects*** using their ```id```.
 
 #### How do we know which shoe belongs to which collection/user?
 

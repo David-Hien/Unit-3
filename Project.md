@@ -175,7 +175,7 @@ As the client requested, the app must include a storage system that stores data 
 
 #### How do we identify and differentiate between rows?
 
-Because the properties of the ***objects*** within a ***table*** can vary greatly, it’s difficult and inefficient to ***identify*** and ***differentiate*** ***objects*** in a ***table***. Therefore, the answer is to add the ```id``` ***column*** that any ***object*** can refer to as the ***primary key***. The ***primary key*** is unique – there can only be one per ***column***. This meant that the program can ***identify*** and ***differentiate*** between ***objects*** using their ```id```.
+Because the properties of the ***objects*** within a ***table*** can vary greatly, it’s difficult and inefficient to ***identify*** and ***differentiate*** ***objects*** in a ***table***. Therefore, the answer is to add the ```id``` ***column*** that any ***object*** can refer to as the ***primary key***. The ***primary key*** is unique – there can only be one per ***column***. This meant that the program can ***identify*** and ***differentiate*** between ***objects*** using their ```id```. As a result, the program can accurately ***identify*** and ***edit***, ***add***, or ***remove*** ***objects*** with ease.
 
 #### How do we know which shoe belongs to which collection/user?
 

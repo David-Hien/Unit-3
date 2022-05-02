@@ -166,12 +166,12 @@ To operate the database, I choose to use SQLAlchemy. It's a declarative query la
 
 ### Creating the UI
 
-The UI (user interface) plays an important role in app development as it provides visuals and the experience. However, this process does not highlight my computational skills and for that reason, I decided not to include this in criteria C. Please refer to the [Apendix](https://github.com/David-Hien/Unit-3/blob/main/Project.md#apendix) for the source code.
+The UI (user interface) plays an important role in achieving the success criterias as it provides visuals and makes the interaction with the app’s function much simpler. I chose the KivyMD library because it supports OOP (object-oriented programming), which is highly compatible with the application.
 
 
 ### Creating the database
 
-One of the most important components of the application is the database because most of the contents are built from the data stored inside of it. The two beings: the users and the shoes. I used SQLAlchemy and ORM (object-relational mapping) to serve several functions based on the success criteria, which are: ***create***, ***edit***, ***add***, and ***remove***.
+As the client requested, the app must include a storage system that stores data on the device. There are two tables to classify all the information: the users and the shoes. I used SQLAlchemy and ORM (object-relational mapping) because it provides an abstraction of database manipulation – the tables are represented by classes, instead of SQL commands.
 
 #### Making the tables
 

@@ -242,9 +242,9 @@ Base.metadata.create_all(db_engine)
 ```
 
 
-### Password hashing
+### How to secure login information
 
-My client values privacy stated in success criteria 4 – the login information and database are secured and the password is hashed. To tackle this problem, I enlisted the help from ```passlib``` library – a hashing library for Python – and specifically, the class ```CryptContext```.
+Because the login system requires to save the user’s login information inside the database, the email and password are susceptible to data leaks or attacks. My client values privacy stated in success criteria 4 – the login information and database are secured and the password is hashed. To tackle this problem, I enlisted the help from ```passlib``` library – a hashing library for Python – and specifically, the class ```CryptContext```.
 
 Hashing is encrypting a value to secure it. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. I used the PBKDF2-SHA256 hash, which is one of the most powerful hashes that focuses on countering brute-force attacks<sup>[[6]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup>. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 

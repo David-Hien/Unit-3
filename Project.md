@@ -248,7 +248,7 @@ Because the login system requires to save the user’s login information inside 
 
 Hashing is encrypting a value to secure it. In case of a security breach, your account/password is most likely safe because it is saved as a seemingly random string. I used the PBKDF2-SHA256 hash, which is one of the most powerful hashes that focuses on countering brute-force attacks<sup>[[6]](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation)</sup>. For example, hash the string ```ilovecomsci``` with PBKDF2-SHA256, 1000 iterations will give you ```$pbkdf2-sha256$1000$KoVwLuVcaw1BiPGe897bGw$pAjrkYKpAyc7Fcu7b6vJ9.L0qzTOtOCKOmmXaKDDSMU```.
 
-In addition, I created two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input in comparison to the hashed password.
+After setting the parameters for the hash, I created two functions: ```encrypt_password()``` for encrypting the password and ```check_password()``` for checking the password input in comparison to the hashed password.
 
 ``` python
 from passlib.context import CryptContext
@@ -277,7 +277,7 @@ As per the client’s request, the app will include a login/register function.
 
 The problem I encountered when making the Login screen was checking if the login information was correct – corresponding to an existing user inside the database. My approach is to split it into 3 steps: ***getting the input***, ***querying the*** ```users``` ***database for users with the same*** ```email``` ***and*** ```password``` ***as the input***, and ***switching to the Home screen***.
 
-#### 1. Getting the input
+#### 1. How to get the input
 
 I assigned the input value from the two TextEditFields (```email``` and ```password```) to two local variables for convenience and code readability.
 
